@@ -77,19 +77,9 @@ Query - запрос на получение текущего состояния
 Запрос на получение данных агрегата.
 
 #### Пример Read-action:
+
 ```php
-use App\Controller\User\CommonOutputContract;
-use App\Entity\User;
-use Symfony\PresentationBundle\Service\Presenter;
-use Nelmio\ApiDocBundle\Annotation\Model;
-use Nelmio\ApiDocBundle\Annotation\Security;
-use OpenApi\Annotations as OA;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\PresentationBundle\Dto\Input\OutputFormat;
-use Symfony\PresentationBundle\Dto\Output\ApiFormatter;
-use Symfony\PresentationBundle\Service\QueryBus\Aggregate\Bus;
-use Symfony\PresentationBundle\Service\QueryBus\Aggregate\Query;
+use App\Controller\User\CommonOutputContract;use App\Entity\User;use Nelmio\ApiDocBundle\Annotation\Model;use Nelmio\ApiDocBundle\Annotation\Security;use OpenApi\Annotations as OA;use Symfony\Component\HttpFoundation\Response;use Symfony\Component\Routing\Annotation\Route;use Symfony\PresentationBundle\Dto\Input\OutputFormat;use Symfony\PresentationBundle\Dto\Output\ApiFormatter;use Symfony\PresentationBundle\Service\Presenter\Implementations\Presenter;use Symfony\PresentationBundle\Service\QueryBus\Aggregate\Bus;use Symfony\PresentationBundle\Service\QueryBus\Aggregate\Query;
 
     /**
      * @OA\Tag(name="User")

@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Symfony\PresentationBundle\Service;
+namespace Symfony\PresentationBundle\Service\Presenter\Implementations;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\PresentationBundle\Dto\Input\OutputFormat;
 
-//todo: реализовать как Interface + Implementations
 class Presenter
 {
     private SerializerInterface $serializer;

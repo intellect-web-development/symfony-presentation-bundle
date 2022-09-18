@@ -38,3 +38,7 @@ services:
     Symfony\PresentationBundle\Service\RequestParser\Interfaces\RequestParserInterface:
         class: Symfony\PresentationBundle\Service\RequestParser\Implementations\RequestParser
         public: true
+
+    Symfony\PresentationBundle\Service\Presenter\Interfaces\PresenterInterface:
+        class: Symfony\PresentationBundle\Service\Presenter\Implementations\Presenter
+        public: true
