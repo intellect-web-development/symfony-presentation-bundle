@@ -79,10 +79,29 @@ Query - запрос на получение текущего состояния
 #### Пример Read-action:
 
 ```php
-use App\Controller\User\CommonOutputContract;use App\Entity\User;use Nelmio\ApiDocBundle\Annotation\Model;use Nelmio\ApiDocBundle\Annotation\Security;use OpenApi\Annotations as OA;use Symfony\Component\HttpFoundation\Response;use Symfony\Component\Routing\Annotation\Route;use Symfony\PresentationBundle\Dto\Input\OutputFormat;use Symfony\PresentationBundle\Dto\Output\ApiFormatter;use Symfony\PresentationBundle\Service\Presenter\Implementations\Presenter;use Symfony\PresentationBundle\Service\QueryBus\Aggregate\Bus;use Symfony\PresentationBundle\Service\QueryBus\Aggregate\Query;
+<?php
 
+declare(strict_types=1);
+
+namespace App\Http\User\Read;
+
+use App\Entity\User;
+use App\Http\User\CommonOutputContract;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use OpenApi\Annotations as OA;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\PresentationBundle\Dto\Input\OutputFormat;
+use Symfony\PresentationBundle\Dto\Output\ApiFormatter;
+use Symfony\PresentationBundle\Service\Presenter;
+use Symfony\PresentationBundle\Service\QueryBus\Aggregate\Bus;
+use Symfony\PresentationBundle\Service\QueryBus\Aggregate\Query;
+
+class Action
+{
     /**
-     * @OA\Tag(name="User")
+     * @OA\Tag(name="Auth.User")
      * @OA\Response(
      *     response=200,
      *     description="Read User",
@@ -121,8 +140,8 @@ use App\Controller\User\CommonOutputContract;use App\Entity\User;use Nelmio\ApiD
      * @Security(name="Bearer")
      */
     #[Route(
-        data: '/users/{id}.{_format}',
-        name: 'users.read',
+        data: '/admin/auth/users/{id}.{_format}',
+        name: 'admin.auth.users.read',
         defaults: ['_format' => 'json'],
         methods: ['GET']
     )]
@@ -143,8 +162,10 @@ use App\Controller\User\CommonOutputContract;use App\Entity\User;use Nelmio\ApiD
             outputFormat: $outputFormat
         );
     }
-```
+}
 
+```
+//realise new version to IWD
 ```php
 //todo:
 // - реализовать примеры command, search, read(текущий read может быть не актуален)
