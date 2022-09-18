@@ -1,0 +1,47 @@
+{
+    "name": "intellect-web-development/symfony-presentation-bundle",
+    "description": "Package of tools for working with Command and Query(including a search engine with filtering, sorting and pagination)",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/intellect-web-development/symfony-presentation-bundle/issues"
+    },
+    "authors": [
+        {
+            "name": "alexander.erin",
+            "email": "sanyaerin@mail.ru"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Symfony\\PresentationBundle\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=8.0",
+        "zircote/swagger-php": "^3.2",
+        "ext-mbstring": "*"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^0.12.81",
+        "phpunit/phpunit": "^9.5",
+        "overtrue/phplint": "^3.0",
+        "squizlabs/php_codesniffer": "^3.5",
+        "roave/security-advisories": "dev-latest",
+        "vimeo/psalm": "^4.6",
+        "phpmetrics/phpmetrics": "^2.7",
+        "symfony/config": "^6.1",
+        "symfony/http-kernel": "^6.1",
+        "symfony/serializer": "^6.1",
+        "symfony/validator": "^6.1",
+        "symfony/dependency-injection": "^6.1",
+        "doctrine/orm": "^2.13"
+    },
+    "scripts": {
+        "lint": "phplint",
+        "phpcs-check": "phpcs",
+        "phpcs-fix": "phpcbf",
+        "phpstan": "phpstan",
+        "psalm": "psalm"
+    }
+}

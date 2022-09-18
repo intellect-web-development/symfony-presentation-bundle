@@ -1,0 +1,40 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Symfony\PresentationBundle\:
+        resource: '../../../src/*'
+        exclude:
+            - '../../../src/DependencyInjection/'
+
+    Symfony\PresentationBundle\Service\Validator\Interfaces\ValidatorService:
+        class: Symfony\PresentationBundle\Service\Validator\Implementation\ValidatorService
+        public: true
+
+    Symfony\PresentationBundle\Core\Dto\Locale:
+        arguments: [ '%locale%' ]
+
+    Symfony\PresentationBundle\Service\RequestParser\Interfaces\FiltersMakerInterface:
+        class: Symfony\PresentationBundle\Service\RequestParser\Implementations\FiltersMaker
+        public: true
+
+    Symfony\PresentationBundle\Service\RequestParser\Interfaces\LocaleMakerInterface:
+        class: Symfony\PresentationBundle\Service\RequestParser\Implementations\LocaleMaker
+        public: true
+
+    Symfony\PresentationBundle\Service\RequestParser\Interfaces\PaginationMakerInterface:
+        class: Symfony\PresentationBundle\Service\RequestParser\Implementations\PaginationMaker
+        public: true
+
+    Symfony\PresentationBundle\Service\RequestParser\Interfaces\SortsMakerInterface:
+        class: Symfony\PresentationBundle\Service\RequestParser\Implementations\SortsMaker
+        public: true
+
+    Symfony\PresentationBundle\Service\Factory\Interfaces\InputContractFactoryInterface:
+        class: Symfony\PresentationBundle\Service\Factory\Implementations\InputContractFactory
+        public: true
+
+    Symfony\PresentationBundle\Service\RequestParser\Interfaces\RequestParserInterface:
+        class: Symfony\PresentationBundle\Service\RequestParser\Implementations\RequestParser
+        public: true
