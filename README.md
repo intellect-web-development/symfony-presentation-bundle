@@ -77,7 +77,6 @@ Query - запрос на получение текущего состояния
 Запрос на получение данных агрегата.
 
 #### Пример Read-action:
-
 ```php
 <?php
 
@@ -101,7 +100,7 @@ use Symfony\PresentationBundle\Service\QueryBus\Aggregate\Query;
 class Action
 {
     /**
-     * @OA\Tag(name="Auth.User")
+     * @OA\Tag(name="User")
      * @OA\Response(
      *     response=200,
      *     description="Read User",
@@ -140,8 +139,8 @@ class Action
      * @Security(name="Bearer")
      */
     #[Route(
-        data: '/admin/auth/users/{id}.{_format}',
-        name: 'admin.auth.users.read',
+        data: '/users/{id}.{_format}',
+        name: 'users.read',
         defaults: ['_format' => 'json'],
         methods: ['GET']
     )]
@@ -163,11 +162,320 @@ class Action
         );
     }
 }
-
 ```
 
+#### Пример Search-action:
 ```php
-//todo:
-// - реализовать примеры command, search, read(текущий read может быть не актуален)
-// - реализовать примеры inputContract, outputContract
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\User\Search;
+
+use App\Entity\User;
+use App\Http\User\CommonOutputContract;
+use Symfony\PresentationBundle\Service\Presenter;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use OpenApi\Annotations as OA;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\PresentationBundle\Dto\Input\OutputFormat;
+use Symfony\PresentationBundle\Dto\Input\SearchQuery;
+use Symfony\PresentationBundle\Dto\Output\ApiFormatter;
+use Symfony\PresentationBundle\Dto\Output\OutputPagination;
+use Symfony\PresentationBundle\Service\QueryBus\Search\Bus;
+use Symfony\PresentationBundle\Service\QueryBus\Search\Query;
+
+class Action
+{
+    /**
+     * @OA\Tag(name="User")
+     * @OA\Get(
+     *     @OA\Parameter(
+     *          name="searchQuery",
+     *          in="query",
+     *          required=false,
+     *          @OA\Schema(
+     *              ref=@Model(type=QueryParams::class)
+     *          ),
+     *     )
+     * )
+     * @OA\Response(
+     *     response=200,
+     *     description="Search by Users",
+     *     @OA\JsonContent(
+     *          allOf={
+     *              @OA\Schema(ref=@Model(type=ApiFormatter::class)),
+     *              @OA\Schema(
+     *                  type="object",
+     *                  @OA\Property(
+     *                      property="data",
+     *                      type="object",
+     *                      @OA\Property(
+     *                          property="data",
+     *                          ref=@Model(type=CommonOutputContract::class),
+     *                          type="object"
+     *                      ),
+     *                      @OA\Property(
+     *                          property="pagination",
+     *                          ref=@Model(type=OutputPagination::class),
+     *                          type="object"
+     *                      )
+     *                  ),
+     *                  @OA\Property(
+     *                      property="status",
+     *                      example="200"
+     *                 )
+     *             )
+     *         }
+     *     )
+     * )
+     * @OA\Response(
+     *     response=400,
+     *     description="Bad Request"
+     * ),
+     * @OA\Response(
+     *     response=401,
+     *     description="Unauthenticated",
+     * ),
+     * @OA\Response(
+     *     response=403,
+     *     description="Forbidden"
+     * ),
+     * @OA\Response(
+     *     response=404,
+     *     description="Resource Not Found"
+     * )
+     * @Security(name="Bearer")
+     */
+    #[Route(
+        data: '/users.{_format}',
+        name: 'users.search',
+        defaults: ['_format' => 'json'],
+        methods: ['GET']
+    )]
+    public function search(
+        Bus          $bus,
+        SearchQuery  $searchQuery,
+        OutputFormat $outputFormat,
+        Presenter    $presenter
+    ): Response {
+        $query = new Query(
+            targetEntityClass: User::class,
+            pagination: $searchQuery->pagination,
+            filters: $searchQuery->filters,
+            sorts: $searchQuery->sorts
+        );
+
+        $searchResult = $bus->query($query);
+        return $presenter->present(
+            data: ApiFormatter::prepare([
+                'data' => array_map(static function (User $user) {
+                    return CommonOutputContract::create($user);
+                }, $searchResult->entities),
+                'pagination' => $searchResult->pagination
+            ]),
+            outputFormat: $outputFormat
+        );
+    }
+}
+```
+#### Пример SearchQueryParams:
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\User\Search;
+
+use OpenApi\Annotations as OA;
+use Symfony\PresentationBundle\Dto\Input\Filters;
+use Symfony\PresentationBundle\Dto\Input\SearchQuery;
+
+class QueryParams extends SearchQuery
+{
+    /**
+     * @OA\Property(
+     *     property="filter",
+     *     type="object",
+     *     example={
+     *         "id": {"eq": "ab4ac777-e054-45ec-b997-b69062917d10"},
+     *         "createdAt": {"range": "2022-02-22 12:00:00,2022-02-22 14:00:00"},
+     *         "updatedAt": {"range": "2022-02-22 12:00:00,2022-02-22 14:00:00"},
+     *         "email": {"eq": "user@dev.ru"},
+     *         "status": {"eq": "active"}
+     *     }
+     * )
+     */
+    public Filters $filters;
+}
+```
+
+#### Пример Command-action:
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\User\Create;
+
+use App\Http\User\CommonOutputContract;
+use App\Entity\User\UseCase\Create\Handler;
+use Symfony\PresentationBundle\Service\Presenter;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use OpenApi\Annotations as OA;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\PresentationBundle\Dto\Input\OutputFormat;
+use Symfony\PresentationBundle\Dto\Output\ApiFormatter;
+
+class Action
+{
+    /**
+     * @OA\Tag(name="Auth.User")
+     * @OA\Post(
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 ref=@Model(type=InputContract::class)
+     *             )
+     *         )
+     *     )
+     * )
+     * @OA\Response(
+     *     response=200,
+     *     description="Create User",
+     *     @OA\JsonContent(
+     *          allOf={
+     *              @OA\Schema(ref=@Model(type=ApiFormatter::class)),
+     *              @OA\Schema(type="object",
+     *                  @OA\Property(
+     *                      property="data",
+     *                      ref=@Model(type=CommonOutputContract::class)
+     *                  ),
+     *                  @OA\Property(
+     *                      property="status",
+     *                      example="200"
+     *                 )
+     *             )
+     *         }
+     *     )
+     * )
+     * @OA\Response(
+     *     response=400,
+     *     description="Bad Request"
+     * ),
+     * @OA\Response(
+     *     response=401,
+     *     description="Unauthenticated",
+     * ),
+     * @OA\Response(
+     *     response=403,
+     *     description="Forbidden"
+     * ),
+     * @OA\Response(
+     *     response=404,
+     *     description="Resource Not Found"
+     * )
+     * @Security(name="Bearer")
+     */
+    #[Route(
+        data: '/users/create.{_format}',
+        name: 'users.create',
+        defaults: ['_format' => 'json'],
+        methods: ['POST']
+    )]
+    public function create(
+        OutputFormat $outputFormat,
+        InputContract $contract,
+        Handler $handler,
+        Presenter $presenter
+    ): Response {
+        $user = $handler->handle(
+            $contract->createCommand()
+        );
+
+        return $presenter->present(
+            data: ApiFormatter::prepare(
+                data: CommonOutputContract::create($user),
+                messages: ['User created']
+            ),
+            outputFormat: $outputFormat
+        );
+    }
+}
+```
+
+#### Пример InputContract:
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\User\Create;
+
+use App\Entity\User\ValueObject\Email as UserEmail;
+use App\Entity\User\UseCase\Create\Command;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\PresentationBundle\Interfaces\InputContractInterface;
+
+class InputContract implements InputContractInterface
+{
+    #[NotNull]
+    #[Length(min: 3, max: 255)]
+    public string $password;
+
+    #[NotNull]
+    #[Email]
+    #[Length(max: 255)]
+    public string $email;
+
+    public function createCommand(): Command
+    {
+        return new Command(
+            password: $this->password,
+            email: new UserEmail($this->email)
+        );
+    }
+}
+```
+
+#### Пример OutputContract:
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Contract\User;
+
+use App\Entity\User;
+use DateTimeInterface;
+
+class CommonOutputContract
+{
+    public string $id;
+    public string $createdAt;
+    public string $updatedAt;
+    public string $email;
+    public string $status;
+    public string $role;
+
+    public static function create(User $user): self
+    {
+        $contract = new self();
+        $contract->id = $user->getId()->getValue();
+        $contract->createdAt = $user->getCreatedAt()->format(DateTimeInterface::ATOM);
+        $contract->updatedAt = $user->getUpdatedAt()->format(DateTimeInterface::ATOM);
+        $contract->email = $user->getEmail()->getValue();
+        $contract->status = $user->getStatus();
+        $contract->role = $user->getRole()->getName();
+
+        return $contract;
+    }
+}
 ```
