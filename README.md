@@ -165,7 +165,7 @@ class Action
 }
 
 ```
-//realise new version to IWD
+
 ```php
 //todo:
 // - реализовать примеры command, search, read(текущий read может быть не актуален)
