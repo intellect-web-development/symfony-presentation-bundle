@@ -224,7 +224,7 @@ class Fetcher
         return array_map(static function (array $entity) use ($idPropertyName) {
             return $entity[$idPropertyName];
         }, $context->queryBuilder
-            ->select("{$context->aggregateAlias}.{$idPropertyName}")
+//            ->select("{$context->aggregateAlias}.{$idPropertyName}")
             ->getQuery()
             ->getResult(AbstractQuery::HYDRATE_ARRAY)
         );
