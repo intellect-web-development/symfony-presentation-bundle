@@ -13,19 +13,26 @@ class FiltersApplicator
     public static function applyMany(
         Filters $filters,
         FilterSqlBuilder $appSqlBuilder,
-        string $fieldPrefix
+        string $fieldPrefix,
+        bool $isRelation
     ): void {
         foreach ($filters->toArray() as $filter) {
-            self::apply($filter, $appSqlBuilder, $fieldPrefix);
+            self::apply($filter, $appSqlBuilder, $fieldPrefix, $isRelation);
         }
     }
 
     public static function apply(
         Filter $filter,
         FilterSqlBuilder $appSqlBuilder,
-        string $fieldPrefix
+        string $fieldPrefix,
+        bool $isRelation
     ): void {
-        $aliasPath = Helper::makeAliasPathFromPropertyPath("$fieldPrefix.{$filter->getProperty()}");
+        if ($isRelation) {
+            $aliasPath = Helper::makeAliasPathFromPropertyPath("$fieldPrefix.{$filter->getProperty()}");
+        } else {
+            $aliasPath = "$fieldPrefix.{$filter->getProperty()}";
+        }
+
         /** @var array|string|int|null $value */
         $value = $filter->getValue();
 

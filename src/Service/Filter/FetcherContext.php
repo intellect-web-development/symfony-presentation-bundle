@@ -190,7 +190,8 @@ class FetcherContext
         FiltersApplicator::applyMany(
             $this->fetchFiltersForEntity($filters),
             $this->filterSqlBuilder,
-            $this->aggregateAlias
+            $this->aggregateAlias,
+            false
         );
 
         $filtersForRelations = $this->fetchFiltersForRelations($filters);
@@ -204,7 +205,6 @@ class FetcherContext
                 $this->queryBuilder->leftJoin($path, $alias);
             }
         }
-
         if (!empty($filtersForRelations->toArray())) {
             $this->queryBuilder->distinct(true);
         }
@@ -212,8 +212,10 @@ class FetcherContext
         FiltersApplicator::applyMany(
             $filtersForRelations,
             $this->filterSqlBuilder,
-            $this->aggregateAlias
+            $this->aggregateAlias,
+            true
         );
+
         return $this;
     }
 
