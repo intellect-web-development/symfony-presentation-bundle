@@ -15,7 +15,7 @@ class FiltersMaker implements FiltersMakerInterface
     public static function make(Request $request): Filters
     {
         /** @var mixed $filterRaw */
-        $filterRaw = $request->query->get('filter');
+        $filterRaw = $request->query->all()['filter'];
 
         if (!isset($filterRaw)) {
             return new Filters();
