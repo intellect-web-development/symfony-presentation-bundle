@@ -15,8 +15,14 @@ class PaginationMaker implements PaginationMakerInterface
 
     public static function make(Request $request): Pagination
     {
-        /** @var mixed $paginationRaw */
-        $paginationRaw = $request->query->get('page');
+        $all = $request->query->all();
+        if (isset($all['page'])) {
+            /** @var mixed $paginationRaw */
+            $paginationRaw = $all['page'];
+        } else {
+            $paginationRaw = null;
+        }
+
         if (!isset($paginationRaw)) {
             return self::createDefaultPagination();
         }
