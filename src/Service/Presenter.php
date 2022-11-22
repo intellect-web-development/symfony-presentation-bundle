@@ -18,7 +18,7 @@ class Presenter
     }
 
     public function present(
-        array $data,
+        mixed $data,
         array $headers = [],
         OutputFormat $outputFormat = null
     ): Response {
