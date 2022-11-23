@@ -20,7 +20,8 @@ class Presenter
     public function present(
         mixed $data,
         array $headers = [],
-        OutputFormat $outputFormat = null
+        OutputFormat $outputFormat = null,
+        int $status = 200,
     ): Response {
         if ($outputFormat === null) {
             $outputFormat = new OutputFormat('json');
@@ -31,7 +32,10 @@ class Presenter
             $outputFormat->getFormat()
         );
 
-        $response = new Response($content);
+        $response = new Response(
+            content: $content,
+            status: $status
+        );
 
         $headers = array_merge(
             $headers,
