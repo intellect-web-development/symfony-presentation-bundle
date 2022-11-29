@@ -35,6 +35,7 @@
         "symfony/serializer": "^6.1",
         "symfony/validator": "^6.1",
         "symfony/dependency-injection": "^6.1",
-        "doctrine/orm": "^2.13"
+        "doctrine/orm": "^2.13",
+        "psalm/plugin-symfony": "^4.0"
     }
 }
