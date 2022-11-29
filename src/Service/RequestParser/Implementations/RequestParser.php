@@ -10,8 +10,8 @@ use Symfony\PresentationBundle\Service\RequestParser\Interfaces\RequestParserInt
 class RequestParser implements RequestParserInterface
 {
     /**
-     * @param Request $request
      * @return array<string, string>
+     *
      * @throws \JsonException
      */
     public function parse(Request $request): array
@@ -32,6 +32,7 @@ class RequestParser implements RequestParserInterface
 
         /** @var array<string, string> $payload */
         $payload = array_merge($query, $content, $requestData);
+
         return $payload;
     }
 }

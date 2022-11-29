@@ -26,7 +26,7 @@ class LocaleMaker implements LocaleMakerInterface
         if ($acceptLanguage = $request->headers->get('Accept-Language')) {
             foreach (explode(',', $acceptLanguage) as $langItem) {
                 $result = strstr($langItem, ';', true);
-                $languages[] = ($result === false) ? $langItem : $result;
+                $languages[] = (false === $result) ? $langItem : $result;
             }
         }
         $languages[] = $request->getDefaultLocale();

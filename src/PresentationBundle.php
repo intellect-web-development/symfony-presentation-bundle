@@ -10,5 +10,4 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 //todo: добавить возможность изменять поведение на передачу клиентом несуществующих фильтров
 class PresentationBundle extends Bundle
 {
-
 }

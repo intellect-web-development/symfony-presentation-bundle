@@ -15,7 +15,6 @@ class Filter
         string $mode,
         mixed $value = null
     ) {
-
         $this->property = $property;
         $this->value = $value;
         $this->searchMode = mb_strtolower($mode);

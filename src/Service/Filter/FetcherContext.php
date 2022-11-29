@@ -27,12 +27,8 @@ class FetcherContext
 
     /**
      * FetcherContext constructor.
-     * @param EntityManagerInterface $entityManager
-     * @param QueryBuilder $queryBuilder
+     *
      * @param class-string $entityClass
-     * @param string $aggregateAlias
-     * @param ClassMetadata $entityClassMetadata
-     * @param FilterSqlBuilder $filterSqlBuilder
      */
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -53,7 +49,6 @@ class FetcherContext
     }
 
     /**
-     * @param Filters $filtersForRelations
      * @return array<string>
      */
     public function fetchJoinList(Filters $filtersForRelations): array
@@ -64,6 +59,7 @@ class FetcherContext
             array_map(static function ($property) {
                 $explodeProperty = explode('.', $property);
                 array_pop($explodeProperty);
+
                 return implode('.', $explodeProperty);
             }, $this->entityAssociationWhiteList)
         );
@@ -107,6 +103,7 @@ class FetcherContext
                 $filtersForRelations[] = $filter;
             }
         }
+
         return new Filters($filtersForRelations);
     }
 
@@ -125,6 +122,7 @@ class FetcherContext
         foreach ($this->entityClassMetadata->fieldNames as $property) {
             $whiteList[] = $property;
         }
+
         return $whiteList;
     }
 
@@ -150,7 +148,7 @@ class FetcherContext
 
     /**
      * @param array<string, array> $associationMappings
-     * @param string $prefix
+     *
      * @return array<int, string>
      */
     private function getChildAssocWhiteList(array $associationMappings, string $prefix): array
@@ -182,6 +180,7 @@ class FetcherContext
         $this->filterSqlBuilder->addSorts(
             $this->filterAllowSorts($sorts)
         );
+
         return $this;
     }
 
@@ -197,7 +196,7 @@ class FetcherContext
         $filtersForRelations = $this->fetchFiltersForRelations($filters);
         foreach ($this->fetchJoinList($filtersForRelations) as $propertyPath) {
             $explodePropertyPath = explode('.', $propertyPath);
-            for ($level = 1, $levelMax = count($explodePropertyPath); $level <= $levelMax; $level++) {
+            for ($level = 1, $levelMax = count($explodePropertyPath); $level <= $levelMax; ++$level) {
                 $relationPath = Helper::makeRelationPath($explodePropertyPath, $level);
                 $path = Helper::makeAliasPathFromPropertyPath("$this->aggregateAlias.$relationPath");
                 $alias = Helper::pathToAlias($path);
@@ -222,6 +221,7 @@ class FetcherContext
     public function paginate(Pagination $pagination): self
     {
         $this->filterSqlBuilder->setPagination($pagination);
+
         return $this;
     }
 }

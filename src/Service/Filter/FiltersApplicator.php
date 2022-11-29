@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Symfony\PresentationBundle\Service\Filter;
 
-use DateTime;
 use Symfony\PresentationBundle\Dto\Input\Filter;
 use Symfony\PresentationBundle\Dto\Input\Filters;
 
@@ -105,8 +104,9 @@ class FiltersApplicator
     ): FilterSqlBuilder {
         [$gte, $lte] = explode(',', $value);
         if (self::isDateTime($gte) && self::isDateTime($lte)) {
-            return $appSqlBuilder->rangeDateTime($field, new DateTime($gte), new DateTime($lte));
+            return $appSqlBuilder->rangeDateTime($field, new \DateTime($gte), new \DateTime($lte));
         }
+
         return $appSqlBuilder->range($field, $gte, $lte);
     }
 
@@ -118,7 +118,7 @@ class FiltersApplicator
         ];
 
         foreach ($formats as $format) {
-            $d = DateTime::createFromFormat($format, $date);
+            $d = \DateTime::createFromFormat($format, $date);
             if ($d && $d->format($format) === $date) {
                 return true;
             }

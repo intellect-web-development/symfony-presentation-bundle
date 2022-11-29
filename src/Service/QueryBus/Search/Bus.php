@@ -18,12 +18,12 @@ class Bus
     public function query(Query $actionContext): SearchResult
     {
         $count = $this->fetcher->count(
-            ($this->fetcher->createContext($actionContext->targetEntityClass))
+            $this->fetcher->createContext($actionContext->targetEntityClass)
                 ->addFilters($actionContext->filters),
         );
 
         $ids = $this->fetcher->searchEntityIds(
-            ($this->fetcher->createContext($actionContext->targetEntityClass))
+            $this->fetcher->createContext($actionContext->targetEntityClass)
                 ->addFilters($actionContext->filters)
                 ->addSorts($actionContext->sorts)
                 ->paginate($actionContext->pagination)
@@ -45,7 +45,6 @@ class Bus
 
         return new SearchResult(entities: $entities, pagination: $paginationDto);
     }
-
 
     public function getRelationPlan(Query $actionContext): array
     {

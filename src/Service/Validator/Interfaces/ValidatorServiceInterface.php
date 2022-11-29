@@ -9,8 +9,6 @@ use Symfony\PresentationBundle\Exception\ValidatorException;
 interface ValidatorServiceInterface
 {
     /**
-     * @param object $object
-     * @return void
      * @throws ValidatorException
      */
     public function validate(object $object): void;

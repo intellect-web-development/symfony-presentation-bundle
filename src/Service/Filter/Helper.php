@@ -10,6 +10,7 @@ class Helper
     {
         $aliasParts = explode('.', $propertyPath);
         $property = array_pop($aliasParts);
+
         return implode('__', $aliasParts) . ".{$property}";
     }
 

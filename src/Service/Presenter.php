@@ -23,7 +23,7 @@ class Presenter
         OutputFormat $outputFormat = null,
         int $status = 200,
     ): Response {
-        if ($outputFormat === null) {
+        if (null === $outputFormat) {
             $outputFormat = new OutputFormat('json');
         }
 
@@ -39,7 +39,7 @@ class Presenter
 
         $headers = array_merge(
             $headers,
-            ['Content-Type' => "application/" . $outputFormat->getFormat()]
+            ['Content-Type' => 'application/' . $outputFormat->getFormat()]
         );
         $response->headers->add($headers);
 

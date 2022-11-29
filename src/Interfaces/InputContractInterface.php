@@ -6,5 +6,4 @@ namespace Symfony\PresentationBundle\Interfaces;
 
 interface InputContractInterface
 {
-
 }

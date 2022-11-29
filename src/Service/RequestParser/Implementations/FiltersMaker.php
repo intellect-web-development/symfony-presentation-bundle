@@ -51,7 +51,6 @@ class FiltersMaker implements FiltersMakerInterface
                 continue;
             }
             /** @var string $mode */
-
             $filters[] = new Filter(
                 (string) $property,
                 $mode ?? FilterSqlBuilder::EQUALS,

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Symfony\PresentationBundle\Service\Filter;
 
-use DateTimeInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\PresentationBundle\Dto\Input\Pagination;
@@ -108,7 +107,7 @@ class FilterSqlBuilder
 
     public function equals(string $field, mixed $value): self
     {
-        if ($value !== null) {
+        if (null !== $value) {
             $value = is_bool($value) ? (int) $value : $value;
             $bind = $this->bind($value);
             $this->queryBuilder->andWhere("{$field} = :{$bind}");
@@ -119,7 +118,7 @@ class FilterSqlBuilder
 
     public function notEquals(string $field, mixed $value): self
     {
-        if ($value !== null) {
+        if (null !== $value) {
             $value = is_bool($value) ? (int) $value : $value;
             $bind = $this->bind($value);
             $this->queryBuilder->andWhere("{$field} != :{$bind}");
@@ -141,12 +140,14 @@ class FilterSqlBuilder
     public function isNull(string $field): self
     {
         $this->queryBuilder->andWhere("{$field} IS NULL");
+
         return $this;
     }
 
     public function notNull(string $field): self
     {
         $this->queryBuilder->andWhere("{$field} IS NOT NULL");
+
         return $this;
     }
 
@@ -182,7 +183,7 @@ class FilterSqlBuilder
 
     public function lessThan(string $field, mixed $lte): self
     {
-        if ($lte !== null) {
+        if (null !== $lte) {
             $lteBind = $this->bind($lte);
             $this->queryBuilder->andWhere("{$field} < :{$lteBind}");
         }
@@ -192,7 +193,7 @@ class FilterSqlBuilder
 
     public function greaterThan(string $field, mixed $gte): self
     {
-        if ($gte !== null) {
+        if (null !== $gte) {
             $gteBind = $this->bind($gte);
             $this->queryBuilder->andWhere("{$field} > :{$gteBind}");
         }
@@ -202,7 +203,7 @@ class FilterSqlBuilder
 
     public function lessOrEquals(string $field, mixed $lte): self
     {
-        if ($lte !== null) {
+        if (null !== $lte) {
             $lteBind = $this->bind($lte);
             $this->queryBuilder->andWhere("{$field} <= :{$lteBind}");
         }
@@ -212,7 +213,7 @@ class FilterSqlBuilder
 
     public function greaterOrEquals(string $field, mixed $gte): self
     {
-        if ($gte !== null) {
+        if (null !== $gte) {
             $gteBind = $this->bind($gte);
             $this->queryBuilder->andWhere("{$field} >= :{$gteBind}");
         }
@@ -222,24 +223,25 @@ class FilterSqlBuilder
 
     public function range(string $field, mixed $gte, mixed $lte): self
     {
-        if ($gte !== null && $lte !== null) {
+        if (null !== $gte && null !== $lte) {
             $gteBind = $this->bind($gte);
             $lteBind = $this->bind($lte);
             $this->queryBuilder->andWhere("{$field} BETWEEN :{$gteBind} AND :{$lteBind}");
-        } elseif ($gte !== null) {
+        } elseif (null !== $gte) {
             $gteBind = $this->bind($gte);
             $this->queryBuilder->andWhere("{$field} >= :{$gteBind}");
-        } elseif ($lte !== null) {
+        } elseif (null !== $lte) {
             $lteBind = $this->bind($lte);
             $this->queryBuilder->andWhere("{$field} <= :{$lteBind}");
         }
+
         return $this;
     }
 
     public function rangeDateTime(
         string $field,
-        ?DateTimeInterface $gte,
-        ?DateTimeInterface $lte
+        ?\DateTimeInterface $gte,
+        ?\DateTimeInterface $lte
     ): self {
         $this->range(
             $field,

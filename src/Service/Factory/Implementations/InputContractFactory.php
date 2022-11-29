@@ -26,8 +26,8 @@ class InputContractFactory implements InputContractFactoryInterface
 
     /**
      * @param class-string<InputContractInterface> $contractClass
-     * @param array<string, string> $payload
-     * @return InputContractInterface
+     * @param array<string, string>                $payload
+     *
      * @throws DomainException
      * @throws \JsonException
      */

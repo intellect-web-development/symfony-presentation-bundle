@@ -1,0 +1,5 @@
+- add phpunit
+- add psalm
+- add phpcs
+- add phpstan
+- fix all linter errors

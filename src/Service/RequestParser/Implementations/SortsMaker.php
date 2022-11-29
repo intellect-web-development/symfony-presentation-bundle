@@ -28,7 +28,7 @@ class SortsMaker implements SortsMakerInterface
         foreach ($sortParams as $sortParam) {
             $field = trim($sortParam, '-');
 
-            $direction = $sortParam[0] === '-' ? 'DESC' : 'ASC';
+            $direction = '-' === $sortParam[0] ? 'DESC' : 'ASC';
             $sorts[] = new Sort($field, $direction);
         }
 

@@ -9,8 +9,8 @@ use Symfony\Component\HttpFoundation\Request;
 interface RequestParserInterface
 {
     /**
-     * @param Request $request
      * @return array<string, string>
+     *
      * @throws \JsonException
      */
     public function parse(Request $request): array;

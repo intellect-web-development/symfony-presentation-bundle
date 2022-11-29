@@ -20,20 +20,16 @@ class Query
 
     /**
      * Context constructor.
+     *
      * @param class-string $targetEntityClass
-     * @param array $hints
-     * @param Pagination|null $pagination
-     * @param Filters|null $filters
-     * @param Sorts|null $sorts
-     * @param bool $eager
      */
     public function __construct(
-        string     $targetEntityClass,
-        array      $hints = [],
+        string $targetEntityClass,
+        array $hints = [],
         Pagination $pagination = null,
-        Filters    $filters = null,
-        Sorts      $sorts = null,
-        bool       $eager = true,
+        Filters $filters = null,
+        Sorts $sorts = null,
+        bool $eager = true,
     ) {
         $this->targetEntityClass = $targetEntityClass;
         $this->pagination = $pagination ?? new Pagination();

@@ -41,6 +41,7 @@ class Fetcher
     {
         $idPropertyName = current($context->entityClassMetadata->identifier);
         $aggregateAlias = self::AGGREGATE_ALIAS;
+
         return (clone $context->queryBuilder)
             ->select("count(distinct {$aggregateAlias}.{$idPropertyName})")
             ->getQuery()
@@ -67,6 +68,7 @@ class Fetcher
         if (empty($result)) {
             throw new DomainException("Entity with {$idPropertyName} '{$id}' not exist", 400);
         }
+
         return current($result);
     }
 
@@ -108,7 +110,7 @@ class Fetcher
         $assocRelations[$targetEntity] = [
             'entity' => $targetEntity,
             'pathPrefix' => $metaPath,
-            'paths' => (static function() use ($em, $targetEntity) {
+            'paths' => (static function () use ($em, $targetEntity) {
                 $meta = $em->getClassMetadata($targetEntity);
                 $fields = [];
                 foreach ($meta->associationMappings as $mapping) {
@@ -116,7 +118,7 @@ class Fetcher
                 }
 
                 return $fields;
-            })()
+            })(),
         ];
 
         foreach ($meta->associationMappings as $mapping) {
@@ -145,7 +147,7 @@ class Fetcher
             $context->entityClass => [
                 'entity' => $context->entityClass,
                 'pathPrefix' => null,
-                'paths' => (static function() use ($em, $context) {
+                'paths' => (static function () use ($em, $context) {
                     $meta = $em->getClassMetadata($context->entityClass);
                     $fields = [];
                     foreach ($meta->associationMappings as $mapping) {
@@ -153,10 +155,10 @@ class Fetcher
                     }
 
                     return $fields;
-                })()
-            ]
+                })(),
+            ],
         ];
-        if ($maxNestedLevel === 1) {
+        if (1 === $maxNestedLevel) {
             return $assocRelations;
         }
 
@@ -173,7 +175,7 @@ class Fetcher
         foreach ($hints['pathPrefixMap'] ?? [] as $entityClass => $pathPrefix) {
             $assocRelations[$entityClass]['entity'] = $entityClass;
             $assocRelations[$entityClass]['pathPrefix'] = $pathPrefix;
-            $assocRelations[$entityClass]['paths'] = $assocRelations[$entityClass]['paths'] ?? [];
+            $assocRelations[$entityClass]['paths'] ??= [];
         }
 
         return $assocRelations;
@@ -192,13 +194,13 @@ class Fetcher
 
                 $propertyPath = implode('.', array_filter([
                     $relation['pathPrefix'],
-                    $path
+                    $path,
                 ], static function (?string $path) {
-                    return $path !== null;
+                    return null !== $path;
                 }));
 
                 $explodePropertyPath = explode('.', $propertyPath);
-                for ($level = 1, $levelMax = count($explodePropertyPath); $level <= $levelMax; $level++) {
+                for ($level = 1, $levelMax = count($explodePropertyPath); $level <= $levelMax; ++$level) {
                     $relationPath = Helper::makeRelationPath($explodePropertyPath, $level);
                     $absolutePath = Helper::makeAliasPathFromPropertyPath("$aggregateAlias.$relationPath");
 
@@ -215,15 +217,17 @@ class Fetcher
     }
 
     /**
-     * @param FetcherContext $context
      * @return array<string>
      */
-    public function searchEntityIds(FetcherContext $context): array {
+    public function searchEntityIds(FetcherContext $context): array
+    {
         $idPropertyName = current($context->entityClassMetadata->identifier);
 
-        return array_map(static function (array $entity) use ($idPropertyName) {
-            return $entity[$idPropertyName];
-        }, $context->queryBuilder
+        return array_map(
+            static function (array $entity) use ($idPropertyName) {
+                return $entity[$idPropertyName];
+            },
+            $context->queryBuilder
 //            ->select("{$context->aggregateAlias}.{$idPropertyName}")
             ->getQuery()
             ->getResult(AbstractQuery::HYDRATE_ARRAY)

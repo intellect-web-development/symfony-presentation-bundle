@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Symfony\PresentationBundle\Dto\Input;
 
 use Symfony\PresentationBundle\Service\Filter\FilterSqlBuilder;
-use TypeError;
 
 class Filters
 {
@@ -19,13 +18,14 @@ class Filters
 
     /**
      * Filters constructor.
+     *
      * @param Filter[] $filters
      */
     public function __construct(array $filters = [])
     {
         foreach ($filters as $filter) {
             if (!$filter instanceof Filter) {
-                throw new TypeError('Variable is not ' . Filter::class);
+                throw new \TypeError('Variable is not ' . Filter::class);
             }
         }
         $this->filters = $filters;
@@ -61,7 +61,6 @@ class Filters
 
     /**
      * @param array<string, string> $aliases
-     * @return void
      */
     public function applyAliases(array $aliases): void
     {
