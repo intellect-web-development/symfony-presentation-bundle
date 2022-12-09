@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Symfony\PresentationBundle\Service\Filter;
+namespace IWD\Symfony\PresentationBundle\Service\Filter;
 
 class Helper
 {

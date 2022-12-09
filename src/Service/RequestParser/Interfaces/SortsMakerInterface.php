@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Symfony\PresentationBundle\Service\RequestParser\Interfaces;
+namespace IWD\Symfony\PresentationBundle\Service\RequestParser\Interfaces;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\PresentationBundle\Dto\Input\Sorts;
+use IWD\Symfony\PresentationBundle\Dto\Input\Sorts;
 
 interface SortsMakerInterface
 {

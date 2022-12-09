@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Symfony\PresentationBundle\Service\Factory\Implementations;
+namespace IWD\Symfony\PresentationBundle\Service\Factory\Implementations;
 
 use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
 use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\PresentationBundle\Exception\DomainException;
-use Symfony\PresentationBundle\Interfaces\InputContractInterface;
-use Symfony\PresentationBundle\Service\Factory\Interfaces\InputContractFactoryInterface;
-use Symfony\PresentationBundle\Service\Validator\Interfaces\ValidatorServiceInterface;
+use IWD\Symfony\PresentationBundle\Exception\DomainException;
+use IWD\Symfony\PresentationBundle\Interfaces\InputContractInterface;
+use IWD\Symfony\PresentationBundle\Service\Factory\Interfaces\InputContractFactoryInterface;
+use IWD\Symfony\PresentationBundle\Service\Validator\Interfaces\ValidatorServiceInterface;
 
 class InputContractFactory implements InputContractFactoryInterface
 {

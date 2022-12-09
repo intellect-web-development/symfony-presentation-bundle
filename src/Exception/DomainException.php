@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Symfony\PresentationBundle\Exception;
+namespace IWD\Symfony\PresentationBundle\Exception;
 
 class DomainException extends PresentationBundleException
 {

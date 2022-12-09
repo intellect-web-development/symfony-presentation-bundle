@@ -91,11 +91,11 @@ use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\PresentationBundle\Dto\Input\OutputFormat;
-use Symfony\PresentationBundle\Dto\Output\ApiFormatter;
-use Symfony\PresentationBundle\Service\Presenter;
-use Symfony\PresentationBundle\Service\QueryBus\Aggregate\Bus;
-use Symfony\PresentationBundle\Service\QueryBus\Aggregate\Query;
+use IWD\Symfony\PresentationBundle\Dto\Input\OutputFormat;
+use IWD\Symfony\PresentationBundle\Dto\Output\ApiFormatter;
+use IWD\Symfony\PresentationBundle\Service\Presenter;
+use IWD\Symfony\PresentationBundle\Service\QueryBus\Aggregate\Bus;
+use IWD\Symfony\PresentationBundle\Service\QueryBus\Aggregate\Query;
 
 class Action
 {
@@ -174,18 +174,18 @@ namespace App\Http\User\Search;
 
 use App\Entity\User;
 use App\Http\User\CommonOutputContract;
-use Symfony\PresentationBundle\Service\Presenter;
+use IWD\Symfony\PresentationBundle\Service\Presenter;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\PresentationBundle\Dto\Input\OutputFormat;
-use Symfony\PresentationBundle\Dto\Input\SearchQuery;
-use Symfony\PresentationBundle\Dto\Output\ApiFormatter;
-use Symfony\PresentationBundle\Dto\Output\OutputPagination;
-use Symfony\PresentationBundle\Service\QueryBus\Search\Bus;
-use Symfony\PresentationBundle\Service\QueryBus\Search\Query;
+use IWD\Symfony\PresentationBundle\Dto\Input\OutputFormat;
+use IWD\Symfony\PresentationBundle\Dto\Input\SearchQuery;
+use IWD\Symfony\PresentationBundle\Dto\Output\ApiFormatter;
+use IWD\Symfony\PresentationBundle\Dto\Output\OutputPagination;
+use IWD\Symfony\PresentationBundle\Service\QueryBus\Search\Bus;
+use IWD\Symfony\PresentationBundle\Service\QueryBus\Search\Query;
 
 class Action
 {
@@ -290,8 +290,8 @@ declare(strict_types=1);
 namespace App\Http\User\Search;
 
 use OpenApi\Annotations as OA;
-use Symfony\PresentationBundle\Dto\Input\Filters;
-use Symfony\PresentationBundle\Dto\Input\SearchQuery;
+use IWD\Symfony\PresentationBundle\Dto\Input\Filters;
+use IWD\Symfony\PresentationBundle\Dto\Input\SearchQuery;
 
 class QueryParams extends SearchQuery
 {
@@ -322,14 +322,14 @@ namespace App\Http\User\Create;
 
 use App\Http\User\CommonOutputContract;
 use App\Entity\User\UseCase\Create\Handler;
-use Symfony\PresentationBundle\Service\Presenter;
+use IWD\Symfony\PresentationBundle\Service\Presenter;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\PresentationBundle\Dto\Input\OutputFormat;
-use Symfony\PresentationBundle\Dto\Output\ApiFormatter;
+use IWD\Symfony\PresentationBundle\Dto\Input\OutputFormat;
+use IWD\Symfony\PresentationBundle\Dto\Output\ApiFormatter;
 
 class Action
 {
@@ -422,7 +422,7 @@ use App\Entity\User\UseCase\Create\Command;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotNull;
-use Symfony\PresentationBundle\Interfaces\InputContractInterface;
+use IWD\Symfony\PresentationBundle\Interfaces\InputContractInterface;
 
 class InputContract implements InputContractInterface
 {

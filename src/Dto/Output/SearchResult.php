@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Symfony\PresentationBundle\Dto\Output;
+namespace IWD\Symfony\PresentationBundle\Dto\Output;
 
 class SearchResult
 {

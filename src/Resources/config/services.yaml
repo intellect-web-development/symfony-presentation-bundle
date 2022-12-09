@@ -3,38 +3,31 @@ services:
         autowire: true
         autoconfigure: true
 
-    Symfony\PresentationBundle\:
+    IWD\Symfony\PresentationBundle\:
         resource: '../../../src/*'
         exclude:
             - '../../../src/DependencyInjection/'
 
-    Symfony\PresentationBundle\Service\Validator\Interfaces\ValidatorService:
-        class: Symfony\PresentationBundle\Service\Validator\Implementation\ValidatorService
-        public: true
+    IWD\Symfony\PresentationBundle\Service\Validator\Interfaces\ValidatorService:
+        class: IWD\Symfony\PresentationBundle\Service\Validator\Implementation\ValidatorService
 
-    Symfony\PresentationBundle\Core\Dto\Locale:
+    IWD\Symfony\PresentationBundle\Core\Dto\Locale:
         arguments: [ '%locale%' ]
 
-    Symfony\PresentationBundle\Service\RequestParser\Interfaces\FiltersMakerInterface:
-        class: Symfony\PresentationBundle\Service\RequestParser\Implementations\FiltersMaker
-        public: true
+    IWD\Symfony\PresentationBundle\Service\RequestParser\Interfaces\FiltersMakerInterface:
+        class: IWD\Symfony\PresentationBundle\Service\RequestParser\Implementations\FiltersMaker
 
-    Symfony\PresentationBundle\Service\RequestParser\Interfaces\LocaleMakerInterface:
-        class: Symfony\PresentationBundle\Service\RequestParser\Implementations\LocaleMaker
-        public: true
+    IWD\Symfony\PresentationBundle\Service\RequestParser\Interfaces\LocaleMakerInterface:
+        class: IWD\Symfony\PresentationBundle\Service\RequestParser\Implementations\LocaleMaker
 
-    Symfony\PresentationBundle\Service\RequestParser\Interfaces\PaginationMakerInterface:
-        class: Symfony\PresentationBundle\Service\RequestParser\Implementations\PaginationMaker
-        public: true
+    IWD\Symfony\PresentationBundle\Service\RequestParser\Interfaces\PaginationMakerInterface:
+        class: IWD\Symfony\PresentationBundle\Service\RequestParser\Implementations\PaginationMaker
 
-    Symfony\PresentationBundle\Service\RequestParser\Interfaces\SortsMakerInterface:
-        class: Symfony\PresentationBundle\Service\RequestParser\Implementations\SortsMaker
-        public: true
+    IWD\Symfony\PresentationBundle\Service\RequestParser\Interfaces\SortsMakerInterface:
+        class: IWD\Symfony\PresentationBundle\Service\RequestParser\Implementations\SortsMaker
 
-    Symfony\PresentationBundle\Service\Factory\Interfaces\InputContractFactoryInterface:
-        class: Symfony\PresentationBundle\Service\Factory\Implementations\InputContractFactory
-        public: true
+    IWD\Symfony\PresentationBundle\Service\Factory\Interfaces\InputContractFactoryInterface:
+        class: IWD\Symfony\PresentationBundle\Service\Factory\Implementations\InputContractFactory
 
-    Symfony\PresentationBundle\Service\RequestParser\Interfaces\RequestParserInterface:
-        class: Symfony\PresentationBundle\Service\RequestParser\Implementations\RequestParser
-        public: true
+    IWD\Symfony\PresentationBundle\Service\RequestParser\Interfaces\RequestParserInterface:
+        class: IWD\Symfony\PresentationBundle\Service\RequestParser\Implementations\RequestParser

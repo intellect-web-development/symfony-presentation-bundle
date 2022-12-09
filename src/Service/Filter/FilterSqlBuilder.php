@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Symfony\PresentationBundle\Service\Filter;
+namespace IWD\Symfony\PresentationBundle\Service\Filter;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\PresentationBundle\Dto\Input\Pagination;
-use Symfony\PresentationBundle\Dto\Input\Sort;
-use Symfony\PresentationBundle\Dto\Input\Sorts;
+use IWD\Symfony\PresentationBundle\Dto\Input\Pagination;
+use IWD\Symfony\PresentationBundle\Dto\Input\Sort;
+use IWD\Symfony\PresentationBundle\Dto\Input\Sorts;
 
 class FilterSqlBuilder
 {

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Symfony\PresentationBundle\Service\RequestParser\Implementations;
+namespace IWD\Symfony\PresentationBundle\Service\RequestParser\Implementations;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\PresentationBundle\Dto\Input\Sort;
-use Symfony\PresentationBundle\Dto\Input\Sorts;
-use Symfony\PresentationBundle\Service\RequestParser\Interfaces\SortsMakerInterface;
+use IWD\Symfony\PresentationBundle\Dto\Input\Sort;
+use IWD\Symfony\PresentationBundle\Dto\Input\Sorts;
+use IWD\Symfony\PresentationBundle\Service\RequestParser\Interfaces\SortsMakerInterface;
 
 class SortsMaker implements SortsMakerInterface
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Symfony\PresentationBundle\Interfaces;
+namespace IWD\Symfony\PresentationBundle\Interfaces;
 
 interface InputContractInterface
 {

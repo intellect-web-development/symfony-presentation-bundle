@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Symfony\PresentationBundle\Dto\Input;
+namespace IWD\Symfony\PresentationBundle\Dto\Input;
 
 class Sorts
 {

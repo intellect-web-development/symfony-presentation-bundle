@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Symfony\PresentationBundle\Service\Filter;
+namespace IWD\Symfony\PresentationBundle\Service\Filter;
 
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\PresentationBundle\Exception\DomainException;
+use IWD\Symfony\PresentationBundle\Exception\DomainException;
 
 class Fetcher
 {

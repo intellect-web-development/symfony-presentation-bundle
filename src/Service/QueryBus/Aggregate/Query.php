@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Symfony\PresentationBundle\Service\QueryBus\Aggregate;
+namespace IWD\Symfony\PresentationBundle\Service\QueryBus\Aggregate;
 
-use Symfony\PresentationBundle\Dto\Input\Filters;
+use IWD\Symfony\PresentationBundle\Dto\Input\Filters;
 
 class Query
 {

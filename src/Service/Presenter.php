@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Symfony\PresentationBundle\Service;
+namespace IWD\Symfony\PresentationBundle\Service;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\PresentationBundle\Dto\Input\OutputFormat;
+use IWD\Symfony\PresentationBundle\Dto\Input\OutputFormat;
 
 class Presenter
 {

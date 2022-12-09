@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Symfony\PresentationBundle\ArgumentResolver;
+namespace IWD\Symfony\PresentationBundle\ArgumentResolver;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
-use Symfony\PresentationBundle\Dto\Input\Pagination;
-use Symfony\PresentationBundle\Service\RequestParser\Interfaces\PaginationMakerInterface;
+use IWD\Symfony\PresentationBundle\Dto\Input\Pagination;
+use IWD\Symfony\PresentationBundle\Service\RequestParser\Interfaces\PaginationMakerInterface;
 
 class PaginationResolver implements ArgumentValueResolverInterface
 {

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Symfony\PresentationBundle\Service\QueryBus\Search;
+namespace IWD\Symfony\PresentationBundle\Service\QueryBus\Search;
 
-use Symfony\PresentationBundle\Dto\Output\OutputPagination;
-use Symfony\PresentationBundle\Dto\Output\SearchResult;
-use Symfony\PresentationBundle\Service\Filter\Fetcher;
+use IWD\Symfony\PresentationBundle\Dto\Output\OutputPagination;
+use IWD\Symfony\PresentationBundle\Dto\Output\SearchResult;
+use IWD\Symfony\PresentationBundle\Service\Filter\Fetcher;
 
 class Bus
 {

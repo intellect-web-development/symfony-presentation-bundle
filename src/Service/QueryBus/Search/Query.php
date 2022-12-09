@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Symfony\PresentationBundle\Service\QueryBus\Search;
+namespace IWD\Symfony\PresentationBundle\Service\QueryBus\Search;
 
-use Symfony\PresentationBundle\Dto\Input\Filters;
-use Symfony\PresentationBundle\Dto\Input\Pagination;
-use Symfony\PresentationBundle\Dto\Input\Sorts;
+use IWD\Symfony\PresentationBundle\Dto\Input\Filters;
+use IWD\Symfony\PresentationBundle\Dto\Input\Pagination;
+use IWD\Symfony\PresentationBundle\Dto\Input\Sorts;
 
 class Query
 {

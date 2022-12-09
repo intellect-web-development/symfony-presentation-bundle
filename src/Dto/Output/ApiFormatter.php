@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Symfony\PresentationBundle\Dto\Output;
+namespace IWD\Symfony\PresentationBundle\Dto\Output;
 
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;

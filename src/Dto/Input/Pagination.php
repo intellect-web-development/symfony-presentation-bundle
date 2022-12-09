@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Symfony\PresentationBundle\Dto\Input;
+namespace IWD\Symfony\PresentationBundle\Dto\Input;
 
 //todo: сделать это интерфейсом как-нибудь, чтобы была возможность кастомизировать валидацию в конструкторе
 class Pagination
@@ -13,7 +13,10 @@ class Pagination
 
     public function __construct(int $pageNumber = 1, int $pageSize = 1, int $maxSize = 500)
     {
-        //todo: если $pageNumber меньше 1 - то присвоить единицу
+        if ($pageNumber < 1) {
+            $pageNumber = 1;
+        }
+
         $this->pageNumber = $pageNumber;
         $this->pageSize = ($pageSize > $maxSize) ? $maxSize : $pageSize;
         $this->offset = ($this->pageNumber - 1) * $this->pageSize;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Symfony\PresentationBundle;
+namespace IWD\Symfony\PresentationBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

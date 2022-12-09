@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Symfony\PresentationBundle\Service\Factory\Interfaces;
+namespace IWD\Symfony\PresentationBundle\Service\Factory\Interfaces;
 
-use Symfony\PresentationBundle\Interfaces\InputContractInterface;
+use IWD\Symfony\PresentationBundle\Interfaces\InputContractInterface;
 
 interface InputContractFactoryInterface
 {

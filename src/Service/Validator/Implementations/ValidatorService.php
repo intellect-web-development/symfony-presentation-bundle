@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Symfony\PresentationBundle\Service\Validator\Implementations;
+namespace IWD\Symfony\PresentationBundle\Service\Validator\Implementations;
 
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\PresentationBundle\Exception\ValidatorException;
-use Symfony\PresentationBundle\Service\Validator\Interfaces\ValidatorServiceInterface;
+use IWD\Symfony\PresentationBundle\Exception\ValidatorException;
+use IWD\Symfony\PresentationBundle\Service\Validator\Interfaces\ValidatorServiceInterface;
 
 class ValidatorService implements ValidatorServiceInterface
 {

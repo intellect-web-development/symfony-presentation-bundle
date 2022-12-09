@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Symfony\PresentationBundle\Service\RequestParser\Implementations;
+namespace IWD\Symfony\PresentationBundle\Service\RequestParser\Implementations;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\PresentationBundle\Dto\Input\Filter;
-use Symfony\PresentationBundle\Dto\Input\Filters;
-use Symfony\PresentationBundle\Service\Filter\FilterSqlBuilder;
-use Symfony\PresentationBundle\Service\RequestParser\Interfaces\FiltersMakerInterface;
+use IWD\Symfony\PresentationBundle\Dto\Input\Filter;
+use IWD\Symfony\PresentationBundle\Dto\Input\Filters;
+use IWD\Symfony\PresentationBundle\Service\Filter\FilterSqlBuilder;
+use IWD\Symfony\PresentationBundle\Service\RequestParser\Interfaces\FiltersMakerInterface;
 
 class FiltersMaker implements FiltersMakerInterface
 {

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Symfony\PresentationBundle\Service\Validator\Interfaces;
+namespace IWD\Symfony\PresentationBundle\Service\Validator\Interfaces;
 
-use Symfony\PresentationBundle\Exception\ValidatorException;
+use IWD\Symfony\PresentationBundle\Exception\ValidatorException;
 
 interface ValidatorServiceInterface
 {

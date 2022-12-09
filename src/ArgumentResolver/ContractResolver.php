@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Symfony\PresentationBundle\ArgumentResolver;
+namespace IWD\Symfony\PresentationBundle\ArgumentResolver;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
-use Symfony\PresentationBundle\Interfaces\InputContractInterface;
-use Symfony\PresentationBundle\Service\Factory\Interfaces\InputContractFactoryInterface;
-use Symfony\PresentationBundle\Service\RequestParser\Interfaces\RequestParserInterface;
+use IWD\Symfony\PresentationBundle\Interfaces\InputContractInterface;
+use IWD\Symfony\PresentationBundle\Service\Factory\Interfaces\InputContractFactoryInterface;
+use IWD\Symfony\PresentationBundle\Service\RequestParser\Interfaces\RequestParserInterface;
 
 class ContractResolver implements ArgumentValueResolverInterface
 {

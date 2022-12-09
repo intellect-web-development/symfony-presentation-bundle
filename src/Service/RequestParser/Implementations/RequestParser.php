@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Symfony\PresentationBundle\Service\RequestParser\Implementations;
+namespace IWD\Symfony\PresentationBundle\Service\RequestParser\Implementations;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\PresentationBundle\Service\RequestParser\Interfaces\RequestParserInterface;
+use IWD\Symfony\PresentationBundle\Service\RequestParser\Interfaces\RequestParserInterface;
 
 class RequestParser implements RequestParserInterface
 {

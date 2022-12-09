@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Symfony\PresentationBundle\Service\QueryBus\Aggregate;
+namespace IWD\Symfony\PresentationBundle\Service\QueryBus\Aggregate;
 
-use Symfony\PresentationBundle\Service\Filter\Fetcher;
+use IWD\Symfony\PresentationBundle\Service\Filter\Fetcher;
 
 class Bus
 {

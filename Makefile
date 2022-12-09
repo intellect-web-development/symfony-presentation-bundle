@@ -4,7 +4,6 @@ phpmetrics:
 linter-autofix:
 	./vendor/bin/php-cs-fixer fix -v --using-cache=no
 
-#todo: fix all linter errors, deprecations
 analyze:
 	./vendor/bin/phplint
 	./vendor/bin/phpstan --memory-limit=-1

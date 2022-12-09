@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Symfony\PresentationBundle\Service\Filter;
+namespace IWD\Symfony\PresentationBundle\Service\Filter;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\PresentationBundle\Dto\Input\Filter;
-use Symfony\PresentationBundle\Dto\Input\Filters;
-use Symfony\PresentationBundle\Dto\Input\Pagination;
-use Symfony\PresentationBundle\Dto\Input\Sort;
-use Symfony\PresentationBundle\Dto\Input\Sorts;
+use IWD\Symfony\PresentationBundle\Dto\Input\Filter;
+use IWD\Symfony\PresentationBundle\Dto\Input\Filters;
+use IWD\Symfony\PresentationBundle\Dto\Input\Pagination;
+use IWD\Symfony\PresentationBundle\Dto\Input\Sort;
+use IWD\Symfony\PresentationBundle\Dto\Input\Sorts;
 
 class FetcherContext
 {
