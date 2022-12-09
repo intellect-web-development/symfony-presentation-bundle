@@ -74,7 +74,12 @@ class FilterSqlBuilder
     public function __construct(QueryBuilder $queryBuilder)
     {
         $this->queryBuilder = $queryBuilder;
-        $this->alias = current($this->queryBuilder->getAllAliases());
+        $aliases = $this->queryBuilder->getAllAliases();
+        if (count($aliases) !== 0) {
+            $this->alias = current($aliases);
+        } else {
+            $this->alias = 'entity';
+        }
     }
 
     public function addSorts(Sorts $sorts): self

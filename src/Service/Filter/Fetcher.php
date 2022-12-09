@@ -21,6 +21,9 @@ class Fetcher
         $this->entityManager = $entityManager;
     }
 
+    /**
+     * @param class-string $entityClass
+     */
     public function createContext(string $entityClass): FetcherContext
     {
         $entityRepository = $this->entityManager->getRepository($entityClass);

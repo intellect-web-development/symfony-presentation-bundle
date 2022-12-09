@@ -15,6 +15,9 @@ class Query
     public Filters $filters;
     public bool $eager;
 
+    /**
+     * @param class-string $targetEntityClass
+     */
     public function __construct(
         string $aggregateId,
         string $targetEntityClass,

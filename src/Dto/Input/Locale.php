@@ -8,19 +8,22 @@ use Symfony\PresentationBundle\Exception\DomainException;
 
 class Locale
 {
-    /** @var string[] */
-    public array $locales = [];
-
-    public function __construct(array $locales)
-    {
+    /**
+     * @param string[] $locales
+     */
+    public function __construct(
+        public array $locales = []
+    ) {
         if (empty($locales)) {
             throw new DomainException('Locales is not set');
         }
-        $this->locales[] = $locales;
     }
 
     public function getPriorityLang(): string
     {
+        if (empty($this->locales)) {
+            return 'en';
+        }
         return current($this->locales);
     }
 
