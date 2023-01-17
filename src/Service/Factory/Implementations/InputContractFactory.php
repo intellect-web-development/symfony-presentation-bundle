@@ -44,9 +44,12 @@ class InputContractFactory implements InputContractFactoryInterface
                 'json'
             );
         } catch (NotNormalizableValueException $exception) {
+            // todo: в случае ошибки прокидывать $payload в виде json в контекст ошибки,
+            //  чтобы была возможность это залогировать
             throw new DomainException(
                 'JSON parse error. Check that required fields are passed and they are not null, and fields type',
-                400
+                400,
+                $exception
             );
         }
 
