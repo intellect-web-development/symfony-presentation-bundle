@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace IWD\Symfony\PresentationBundle\Dto\Input;
 
-use IWD\Symfony\PresentationBundle\Exception\DomainException;
+use IWD\Symfony\PresentationBundle\Exception\PresentationBundleException;
 
 class OutputFormat
 {
@@ -31,7 +31,7 @@ class OutputFormat
     public static function guardFormat(string $format): void
     {
         if (!in_array($format, self::VALID_FORMATS)) {
-            throw new DomainException("{$format} is invalid format type");
+            throw new PresentationBundleException("{$format} is invalid format type");
         }
     }
 

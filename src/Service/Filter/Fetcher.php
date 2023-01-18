@@ -8,7 +8,7 @@ use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\QueryBuilder;
-use IWD\Symfony\PresentationBundle\Exception\DomainException;
+use IWD\Symfony\PresentationBundle\Exception\PresentationBundleException;
 
 class Fetcher
 {
@@ -69,7 +69,7 @@ class Fetcher
         }
         $result = $context->queryBuilder->getQuery()->getResult();
         if (empty($result)) {
-            throw new DomainException("Entity with {$idPropertyName} '{$id}' not exist", 400);
+            throw new PresentationBundleException("Entity with {$idPropertyName} '{$id}' not exist", 400);
         }
 
         return current($result);

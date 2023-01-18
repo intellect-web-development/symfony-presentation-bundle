@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace IWD\Symfony\PresentationBundle\Service\Factory\Implementations;
 
+use IWD\Symfony\PresentationBundle\Exception\DeserializePayloadToInputContractException;
+use IWD\Symfony\PresentationBundle\Exception\PresentationBundleException;
 use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
 use Symfony\Component\Serializer\SerializerInterface;
-use IWD\Symfony\PresentationBundle\Exception\DomainException;
 use IWD\Symfony\PresentationBundle\Interfaces\InputContractInterface;
 use IWD\Symfony\PresentationBundle\Service\Factory\Interfaces\InputContractFactoryInterface;
 use IWD\Symfony\PresentationBundle\Service\Validator\Interfaces\ValidatorServiceInterface;
@@ -28,13 +29,13 @@ class InputContractFactory implements InputContractFactoryInterface
      * @param class-string<InputContractInterface> $contractClass
      * @param array<string, string>                $payload
      *
-     * @throws DomainException
+     * @throws PresentationBundleException
      * @throws \JsonException
      */
     public function resolve(string $contractClass, array $payload): InputContractInterface
     {
         if (!is_subclass_of($contractClass, InputContractInterface::class)) {
-            throw new DomainException("{$contractClass} not is subclass of " . InputContractInterface::class, 400);
+            throw new PresentationBundleException("{$contractClass} not is subclass of " . InputContractInterface::class, 400);
         }
 
         try {
@@ -44,12 +45,11 @@ class InputContractFactory implements InputContractFactoryInterface
                 'json'
             );
         } catch (NotNormalizableValueException $exception) {
-            // todo: в случае ошибки прокидывать $payload в виде json в контекст ошибки,
-            //  чтобы была возможность это залогировать
-            throw new DomainException(
-                'JSON parse error. Check that required fields are passed and they are not null, and fields type',
-                400,
-                $exception
+            throw new DeserializePayloadToInputContractException(
+                message: 'Not normalizable value. Check that required fields are passed and they are not null, and fields type.',
+                code: 400,
+                previous: $exception,
+                payload: $payload
             );
         }
 

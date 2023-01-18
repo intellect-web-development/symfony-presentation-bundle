@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace IWD\Symfony\PresentationBundle\Dto\Input;
 
-use IWD\Symfony\PresentationBundle\Exception\DomainException;
+use IWD\Symfony\PresentationBundle\Exception\PresentationBundleException;
 
 class Locale
 {
@@ -15,7 +15,7 @@ class Locale
         public array $locales = []
     ) {
         if (empty($locales)) {
-            throw new DomainException('Locales is not set');
+            throw new PresentationBundleException('Locales is not set');
         }
     }
 

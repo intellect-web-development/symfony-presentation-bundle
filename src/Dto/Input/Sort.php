@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace IWD\Symfony\PresentationBundle\Dto\Input;
 
-use IWD\Symfony\PresentationBundle\Exception\DomainException;
+use IWD\Symfony\PresentationBundle\Exception\PresentationBundleException;
 
 class Sort
 {
@@ -19,7 +19,7 @@ class Sort
         $this->field = $field;
 
         if (!in_array($direction, [self::SORT_ASC, self::SORT_DESC])) {
-            throw new DomainException('Sort direction should be ASC or DESC only', 400);
+            throw new PresentationBundleException('Sort direction should be ASC or DESC only', 400);
         }
 
         $this->direction = $direction;
