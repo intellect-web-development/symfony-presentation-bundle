@@ -4,26 +4,31 @@ declare(strict_types=1);
 
 namespace IWD\Symfony\PresentationBundle\ArgumentResolver;
 
+use Generator;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
+use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use IWD\Symfony\PresentationBundle\Dto\Input\Pagination;
 use IWD\Symfony\PresentationBundle\Service\RequestParser\Interfaces\PaginationMakerInterface;
 
-class PaginationResolver implements ArgumentValueResolverInterface
+class PaginationResolver implements ValueResolverInterface
 {
     public function __construct(
         private PaginationMakerInterface $paginationMaker
     ) {
     }
 
-    public function supports(Request $request, ArgumentMetadata $argument): bool
+    public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
-        return Pagination::class === $argument->getType();
+        if (!$this->supports($request, $argument)) {
+            return [];
+        }
+
+        yield $this->paginationMaker::make($request);
     }
 
-    public function resolve(Request $request, ArgumentMetadata $argument): \Generator
+    private function supports(Request $request, ArgumentMetadata $argument): bool
     {
-        yield $this->paginationMaker::make($request);
+        return Pagination::class === $argument->getType();
     }
 }

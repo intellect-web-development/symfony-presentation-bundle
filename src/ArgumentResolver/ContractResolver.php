@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace IWD\Symfony\PresentationBundle\ArgumentResolver;
 
+use Generator;
+use JsonException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
+use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use IWD\Symfony\PresentationBundle\Interfaces\InputContractInterface;
 use IWD\Symfony\PresentationBundle\Service\Factory\Interfaces\InputContractFactoryInterface;
 use IWD\Symfony\PresentationBundle\Service\RequestParser\Interfaces\RequestParserInterface;
 
-class ContractResolver implements ArgumentValueResolverInterface
+class ContractResolver implements ValueResolverInterface
 {
     public function __construct(
         private InputContractFactoryInterface $inputContractResolver,
@@ -19,18 +21,15 @@ class ContractResolver implements ArgumentValueResolverInterface
     ) {
     }
 
-    public function supports(Request $request, ArgumentMetadata $argument): bool
-    {
-        $type = $argument->getType();
-
-        return null !== $type && is_subclass_of($type, InputContractInterface::class);
-    }
-
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
-    public function resolve(Request $request, ArgumentMetadata $argument): \Generator
+    public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
+        if (!$this->supports($request, $argument)) {
+            return [];
+        }
+
         /** @var class-string<InputContractInterface> $type */
         $type = $argument->getType();
 
@@ -38,5 +37,12 @@ class ContractResolver implements ArgumentValueResolverInterface
             $type,
             $this->requestParser->parse($request)
         );
+    }
+
+    private function supports(Request $request, ArgumentMetadata $argument): bool
+    {
+        $type = $argument->getType();
+
+        return null !== $type && is_subclass_of($type, InputContractInterface::class);
     }
 }
