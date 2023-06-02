@@ -4,12 +4,8 @@ declare(strict_types=1);
 
 namespace IWD\Symfony\PresentationBundle\Dto\Input;
 
-use IWD\Symfony\PresentationBundle\Service\Filter\FilterSqlBuilder;
-
 class Filters
 {
-    public const MODES = FilterSqlBuilder::MODES;
-
     /** @var Filter[] */
     protected array $filters;
 
@@ -39,8 +35,8 @@ class Filters
     public function applyAlias(string $origin, string $alias): void
     {
         foreach ($this->filters as $filter) {
-            if (mb_strtolower($origin) === mb_strtolower($filter->getProperty())) {
-                $filter->setPropertyName($alias);
+            if (mb_strtolower($origin) === mb_strtolower($filter->property)) {
+                $filter->property = $alias;
             }
         }
     }
@@ -52,7 +48,7 @@ class Filters
         }, $properties);
 
         foreach ($this->filters as $key => $filter) {
-            if (in_array(mb_strtolower($filter->getProperty()), $properties, true)) {
+            if (in_array(mb_strtolower($filter->property), $properties, true)) {
                 $this->blocked[] = $filter;
                 unset($this->filters[$key]);
             }

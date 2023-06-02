@@ -65,7 +65,7 @@ class FetcherContext
         );
 
         foreach ($filtersForRelations->toArray() as $filter) {
-            $explodeProperty = explode('.', $filter->getProperty());
+            $explodeProperty = explode('.', $filter->property);
             array_pop($explodeProperty);
             $assocProperty = implode('.', $explodeProperty);
 
@@ -81,7 +81,7 @@ class FetcherContext
     {
         return new Filters(
             array_filter($filters->toArray(), function (Filter $filter) {
-                return in_array($filter->getProperty(), $this->entityWhiteList, true);
+                return in_array($filter->property, $this->entityWhiteList, true);
             })
         );
     }
@@ -99,7 +99,7 @@ class FetcherContext
     {
         $filtersForRelations = [];
         foreach ($filters->toArray() as $filter) {
-            if (in_array($filter->getProperty(), $this->entityAssociationWhiteList, true)) {
+            if (in_array($filter->property, $this->entityAssociationWhiteList, true)) {
                 $filtersForRelations[] = $filter;
             }
         }

@@ -24,6 +24,7 @@ class Locale
         if (empty($this->locales)) {
             return 'en';
         }
+
         return current($this->locales);
     }
 

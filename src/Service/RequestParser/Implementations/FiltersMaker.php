@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace IWD\Symfony\PresentationBundle\Service\RequestParser\Implementations;
 
+use IWD\Symfony\PresentationBundle\Service\Filter\FilterMode;
 use Symfony\Component\HttpFoundation\Request;
 use IWD\Symfony\PresentationBundle\Dto\Input\Filter;
 use IWD\Symfony\PresentationBundle\Dto\Input\Filters;
-use IWD\Symfony\PresentationBundle\Service\Filter\FilterSqlBuilder;
 use IWD\Symfony\PresentationBundle\Service\RequestParser\Interfaces\FiltersMakerInterface;
 
 class FiltersMaker implements FiltersMakerInterface
@@ -42,35 +42,19 @@ class FiltersMaker implements FiltersMakerInterface
 
             /** @var mixed $value */
             $value = current($filterExpression);
-            $mode = key($filterExpression);
 
             if (!self::valueIsValid($value)) {
                 continue;
             }
-            if (!self::modeIsValid($mode)) {
-                continue;
-            }
-            /** @var string $mode */
+            $filterMode = FilterMode::tryFrom(mb_strtolower((string) key($filterExpression))) ?? FilterMode::Equals;
             $filters[] = new Filter(
                 (string) $property,
-                $mode ?? FilterSqlBuilder::EQUALS,
+                $filterMode,
                 $value,
             );
         }
 
         return new Filters($filters);
-    }
-
-    private static function modeIsValid(?string $mode): bool
-    {
-        if (!isset($mode)) {
-            return false;
-        }
-        if (!in_array($mode, FilterSqlBuilder::MODES)) {
-            return false;
-        }
-
-        return true;
     }
 
     private static function valueIsValid(mixed $value): bool

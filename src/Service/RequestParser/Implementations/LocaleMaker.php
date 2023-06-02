@@ -36,9 +36,9 @@ class LocaleMaker implements LocaleMakerInterface
             $languages[$i] = str_replace('_', '-', $language);
         }
         $languages = array_unique($languages);
-        if (empty($languages)) {
-            $languages = ['en'];
-        }
+//        if (empty($languages)) {
+//            $languages = ['en'];
+//        }
 
         return new Locale($languages);
     }

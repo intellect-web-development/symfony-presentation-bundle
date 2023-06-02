@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace IWD\Symfony\PresentationBundle\Service\Filter;
 
+use DateTime;
 use IWD\Symfony\PresentationBundle\Dto\Input\Filter;
 use IWD\Symfony\PresentationBundle\Dto\Input\Filters;
 
@@ -27,71 +28,71 @@ class FiltersApplicator
         bool $isRelation
     ): void {
         if ($isRelation) {
-            $aliasPath = Helper::makeAliasPathFromPropertyPath("$fieldPrefix.{$filter->getProperty()}");
+            $aliasPath = Helper::makeAliasPathFromPropertyPath("$fieldPrefix.$filter->property");
         } else {
-            $aliasPath = "$fieldPrefix.{$filter->getProperty()}";
+            $aliasPath = "$fieldPrefix.$filter->property";
         }
 
         /** @var array|string|int|null $value */
-        $value = $filter->getValue();
+        $value = $filter->value;
 
-        switch ($filter->getSearchMode()) {
-            case FilterSqlBuilder::NOT_IN:
+        switch ($filter->mode) {
+            case FilterMode::NotIn:
                 if (isset($value) && is_array($value)) {
                     $appSqlBuilder->notIn($aliasPath, $value);
                 }
                 break;
-            case FilterSqlBuilder::IN:
+            case FilterMode::In:
                 if (isset($value) && is_array($value)) {
                     $appSqlBuilder->in($aliasPath, $value);
                 }
                 break;
-            case FilterSqlBuilder::RANGE:
+            case FilterMode::Range:
                 if (isset($value) && is_string($value)) {
                     self::rangeDecorator($appSqlBuilder, $value, $aliasPath);
                 }
                 break;
-            case FilterSqlBuilder::IS_NULL:
+            case FilterMode::IsNull:
                 $appSqlBuilder->isNull($aliasPath);
                 break;
-            case FilterSqlBuilder::NOT_NULL:
+            case FilterMode::NotNull:
                 $appSqlBuilder->notNull($aliasPath);
                 break;
-            case FilterSqlBuilder::LESS_THAN:
-            case FilterSqlBuilder::LESS_THAN_ALIAS_1:
-            case FilterSqlBuilder::LESS_THAN_ALIAS_2:
+            case FilterMode::LessThan:
+            case FilterMode::LessThanAlias1:
+            case FilterMode::LessThanAlias2:
                 $appSqlBuilder->lessThan($aliasPath, $value);
                 break;
-            case FilterSqlBuilder::GREATER_THAN:
-            case FilterSqlBuilder::GREATER_THAN_ALIAS_1:
-            case FilterSqlBuilder::GREATER_THAN_ALIAS_2:
+            case FilterMode::GreaterThan:
+            case FilterMode::GreaterThanAlias1:
+            case FilterMode::GreaterThanAlias2:
                 $appSqlBuilder->greaterThan($aliasPath, $value);
                 break;
-            case FilterSqlBuilder::LESS_OR_EQUALS:
-            case FilterSqlBuilder::LESS_OR_EQUALS_ALIAS_1:
-            case FilterSqlBuilder::LESS_OR_EQUALS_ALIAS_2:
+            case FilterMode::LessOrEquals:
+            case FilterMode::LessOrEqualsAlias1:
+            case FilterMode::LessOrEqualsAlias2:
                 $appSqlBuilder->lessOrEquals($aliasPath, $value);
                 break;
-            case FilterSqlBuilder::GREATER_OR_EQUALS:
-            case FilterSqlBuilder::GREATER_OR_EQUALS_ALIAS_1:
-            case FilterSqlBuilder::GREATER_OR_EQUALS_ALIAS_2:
+            case FilterMode::GreaterOrEquals:
+            case FilterMode::GreaterOrEqualsAlias1:
+            case FilterMode::GreaterOrEqualsAlias2:
                 $appSqlBuilder->greaterOrEquals($aliasPath, $value);
                 break;
-            case FilterSqlBuilder::LIKE:
+            case FilterMode::Like:
                 $appSqlBuilder->like($aliasPath, $value);
                 break;
-            case FilterSqlBuilder::NOT_LIKE:
+            case FilterMode::NotLike:
                 $appSqlBuilder->notLike($aliasPath, $value);
                 break;
-            case FilterSqlBuilder::EQUALS:
-            case FilterSqlBuilder::EQUALS_ALIAS_1:
-            case FilterSqlBuilder::EQUALS_ALIAS_2:
+            case FilterMode::Equals:
+            case FilterMode::EqualsAlias1:
+            case FilterMode::EqualsAlias2:
                 $appSqlBuilder->equals($aliasPath, $value);
                 break;
-            case FilterSqlBuilder::NOT_EQUALS:
-            case FilterSqlBuilder::NOT_EQUALS_ALIAS_1:
-            case FilterSqlBuilder::NOT_EQUALS_ALIAS_2:
-            case FilterSqlBuilder::NOT_EQUALS_ALIAS_3:
+            case FilterMode::NotEquals:
+            case FilterMode::NotEqualsAlias1:
+            case FilterMode::NotEqualsAlias2:
+            case FilterMode::NotEqualsAlias3:
                 $appSqlBuilder->notEquals($aliasPath, $value);
                 break;
         }
@@ -104,7 +105,7 @@ class FiltersApplicator
     ): FilterSqlBuilder {
         [$gte, $lte] = explode(',', $value);
         if (self::isDateTime($gte) && self::isDateTime($lte)) {
-            return $appSqlBuilder->rangeDateTime($field, new \DateTime($gte), new \DateTime($lte));
+            return $appSqlBuilder->rangeDateTime($field, new DateTime($gte), new DateTime($lte));
         }
 
         return $appSqlBuilder->range($field, $gte, $lte);
@@ -118,7 +119,7 @@ class FiltersApplicator
         ];
 
         foreach ($formats as $format) {
-            $d = \DateTime::createFromFormat($format, $date);
+            $d = DateTime::createFromFormat($format, $date);
             if ($d && $d->format($format) === $date) {
                 return true;
             }

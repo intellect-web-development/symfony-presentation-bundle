@@ -39,35 +39,6 @@ class FilterSqlBuilder
     public const GREATER_OR_EQUALS_ALIAS_1 = '>=';
     public const GREATER_OR_EQUALS_ALIAS_2 = 'gte';
 
-    public const MODES = [
-        self::NOT_IN,
-        self::IN,
-        self::RANGE,
-        self::IS_NULL,
-        self::NOT_NULL,
-        self::LESS_THAN,
-        self::LESS_THAN_ALIAS_1,
-        self::LESS_THAN_ALIAS_2,
-        self::GREATER_THAN,
-        self::GREATER_THAN_ALIAS_1,
-        self::GREATER_THAN_ALIAS_2,
-        self::LESS_OR_EQUALS,
-        self::LESS_OR_EQUALS_ALIAS_1,
-        self::LESS_OR_EQUALS_ALIAS_2,
-        self::GREATER_OR_EQUALS,
-        self::GREATER_OR_EQUALS_ALIAS_1,
-        self::GREATER_OR_EQUALS_ALIAS_2,
-        self::LIKE,
-        self::NOT_LIKE,
-        self::EQUALS,
-        self::EQUALS_ALIAS_1,
-        self::EQUALS_ALIAS_2,
-        self::NOT_EQUALS,
-        self::NOT_EQUALS_ALIAS_1,
-        self::NOT_EQUALS_ALIAS_2,
-        self::NOT_EQUALS_ALIAS_3,
-    ];
-
     public QueryBuilder $queryBuilder;
     private string $alias;
 
@@ -75,7 +46,7 @@ class FilterSqlBuilder
     {
         $this->queryBuilder = $queryBuilder;
         $aliases = $this->queryBuilder->getAllAliases();
-        if (count($aliases) !== 0) {
+        if (0 !== count($aliases)) {
             $this->alias = current($aliases);
         } else {
             $this->alias = 'entity';
