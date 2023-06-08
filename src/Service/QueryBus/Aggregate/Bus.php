@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace IWD\Symfony\PresentationBundle\Service\QueryBus\Aggregate;
 
 use IWD\Symfony\PresentationBundle\Service\Filter\Fetcher;
-use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class Bus
