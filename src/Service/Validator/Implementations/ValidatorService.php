@@ -12,15 +12,10 @@ use IWD\Symfony\PresentationBundle\Service\Validator\Interfaces\ValidatorService
 
 class ValidatorService implements ValidatorServiceInterface
 {
-    private ValidatorInterface $validator;
-    private SerializerInterface $serializer;
-
     public function __construct(
-        ValidatorInterface $validator,
-        SerializerInterface $serializer
+        private readonly ValidatorInterface $validator,
+        private readonly SerializerInterface $serializer,
     ) {
-        $this->validator = $validator;
-        $this->serializer = $serializer;
     }
 
     public function validate(object $object): void
@@ -32,7 +27,9 @@ class ValidatorService implements ValidatorServiceInterface
             $errors[$violation->getPropertyPath()] = $violation->getMessage();
         }
         if ($violationList->count()) {
-            $errorJson = $this->serializer->serialize($errors, 'json');
+            $errorJson = $this->serializer->serialize($errors, 'json', [
+                'json_encode_options' => JSON_UNESCAPED_UNICODE
+            ]);
             throw new ValidatorException($errorJson);
         }
     }
