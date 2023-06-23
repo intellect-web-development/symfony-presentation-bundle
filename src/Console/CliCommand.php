@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace IWD\Symfony\PresentationBundle\Console;
 
+use Exception;
 use IWD\Symfony\PresentationBundle\Attribute\CliContract;
 use IWD\Symfony\PresentationBundle\Exception\ValidatorException;
 use IWD\Symfony\PresentationBundle\Interfaces\InputContractInterface;
@@ -26,19 +27,40 @@ abstract class CliCommand extends Command
     /**
      * @description You can override this method and return your target class here, or use the CliContract attribute.
      *
-     * @return class-string<InputContractInterface>|null
+     * @return class-string<InputContractInterface>
+     * @throws Exception
      */
-    protected function getInputContractClass(): ?string
+    protected function getInputContractClass(): string
     {
         $reflection = new ReflectionClass($this);
         $attributes = $reflection->getAttributes();
         foreach ($attributes as $attribute) {
             if ($attribute->getName() === CliContract::class) {
-                return $attribute->getArguments()['class'] ?? null;
+                $class = $attribute->getArguments()['class'] ?? NullInputContract::class;
+                if (!class_exists($class)) {
+                    throw new Exception(
+                        sprintf(
+                            '"%s" class not exists, check "%s" argument',
+                            $class,
+                            CliContract::class,
+                        )
+                    );
+                }
+                if (!is_subclass_of($class, InputContractInterface::class)) {
+                    throw new Exception(
+                        sprintf(
+                            '"%s" is not subclass of "%s"',
+                            $class,
+                            InputContractInterface::class,
+                        )
+                    );
+                }
+
+                return $class;
             }
         }
 
-        return null;
+        return NullInputContract::class;
     }
 
     protected function configure(): void
@@ -96,7 +118,7 @@ abstract class CliCommand extends Command
         }
     }
 
-    abstract protected function handle(SymfonyStyle $io, ?InputContractInterface $inputContract): int;
+    abstract protected function handle(SymfonyStyle $io, InputContractInterface $inputContract): int;
 
     protected function autoconfigure(): bool
     {
@@ -112,7 +134,7 @@ abstract class CliCommand extends Command
             if (null === $inputContractClass) {
                 return $this->handle(
                     io: $io,
-                    inputContract: null,
+                    inputContract: new NullInputContract(),
                 );
             }
             /** @var InputContractInterface $inputContract */
