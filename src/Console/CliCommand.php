@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace IWD\Symfony\PresentationBundle\Console;
 
+use IWD\Symfony\PresentationBundle\Exception\ValidatorException;
 use IWD\Symfony\PresentationBundle\Interfaces\InputContractInterface;
 use IWD\Symfony\PresentationBundle\Service\CliContractResolver;
 use ReflectionClass;
@@ -12,6 +13,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Throwable;
 
 abstract class CliCommand extends Command
 {
@@ -89,8 +91,25 @@ abstract class CliCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        /** @var InputContractInterface $inputContract */
-        $inputContract = $this->cliContractResolver->resolve($input, static::getInputContractClass());
+        try {
+            /** @var InputContractInterface $inputContract */
+            $inputContract = $this->cliContractResolver->resolve($input, static::getInputContractClass());
+        } catch (ValidatorException $exception) {
+            $violations = json_decode($exception->getMessage(), true, 512, JSON_THROW_ON_ERROR);
+            $message = 'Command options has violations:' . PHP_EOL;
+
+            $i = 0;
+            foreach ($violations as $property => $violation) {
+                ++$i;
+                $message .= sprintf(
+                        '%s. %s: %s',
+                        $i, $property, $violation
+                    ) . PHP_EOL;
+            }
+            $io->error($message);
+
+            return self::FAILURE;
+        }
 
         return $this->handle(
             io: $io,
