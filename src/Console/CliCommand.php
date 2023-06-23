@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace IWD\Symfony\PresentationBundle\Console;
 
+use IWD\Symfony\PresentationBundle\Attribute\CliContract;
 use IWD\Symfony\PresentationBundle\Exception\ValidatorException;
 use IWD\Symfony\PresentationBundle\Interfaces\InputContractInterface;
 use IWD\Symfony\PresentationBundle\Service\CliContractResolver;
@@ -13,7 +14,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Throwable;
 
 abstract class CliCommand extends Command
 {
@@ -23,10 +23,31 @@ abstract class CliCommand extends Command
         parent::__construct();
     }
 
+    /**
+     * @description You can override this method and return your target class here, or use the CliContract attribute.
+     *
+     * @return class-string<InputContractInterface>|null
+     */
+    protected function getInputContractClass(): ?string
+    {
+        $reflection = new ReflectionClass($this);
+        $attributes = $reflection->getAttributes();
+        foreach ($attributes as $attribute) {
+            if ($attribute->getName() === CliContract::class) {
+                return $attribute->getArguments()['class'] ?? null;
+            }
+        }
+
+        return null;
+    }
+
     protected function configure(): void
     {
         if ($this->autoconfigure()) {
-            $inputContractClass = static::getInputContractClass();
+            $inputContractClass = $this->getInputContractClass();
+            if (null === $inputContractClass) {
+                return;
+            }
             $inputContract = new $inputContractClass();
             // Получаем объект ReflectionClass для класса InputContract
             $reflectionClass = new ReflectionClass($inputContractClass);
@@ -75,12 +96,7 @@ abstract class CliCommand extends Command
         }
     }
 
-    /**
-     * @return class-string<InputContractInterface>
-     */
-    abstract protected static function getInputContractClass(): string;
-
-    abstract protected function handle(SymfonyStyle $io, InputContractInterface $inputContract): int;
+    abstract protected function handle(SymfonyStyle $io, ?InputContractInterface $inputContract): int;
 
     protected function autoconfigure(): bool
     {
@@ -92,8 +108,15 @@ abstract class CliCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         try {
+            $inputContractClass = $this->getInputContractClass();
+            if (null === $inputContractClass) {
+                return $this->handle(
+                    io: $io,
+                    inputContract: null,
+                );
+            }
             /** @var InputContractInterface $inputContract */
-            $inputContract = $this->cliContractResolver->resolve($input, static::getInputContractClass());
+            $inputContract = $this->cliContractResolver->resolve($input, $inputContractClass);
         } catch (ValidatorException $exception) {
             $violations = json_decode($exception->getMessage(), true, 512, JSON_THROW_ON_ERROR);
             $message = 'Command options has violations:' . PHP_EOL;
@@ -102,9 +125,9 @@ abstract class CliCommand extends Command
             foreach ($violations as $property => $violation) {
                 ++$i;
                 $message .= sprintf(
-                        '%s. %s: %s',
-                        $i, $property, $violation
-                    ) . PHP_EOL;
+                    '%s. %s: %s',
+                    $i, $property, $violation
+                ) . PHP_EOL;
             }
             $io->error($message);
 
