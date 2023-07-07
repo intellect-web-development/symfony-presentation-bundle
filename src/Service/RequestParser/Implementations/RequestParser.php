@@ -16,22 +16,17 @@ class RequestParser implements RequestParserInterface
      */
     public function parse(Request $request): array
     {
-        $query = $request->query->all();
-
-        $content = !empty($request->getContent())
-            ? (array) json_decode(
-                (string) $request->getContent(),
-                true,
-                512,
-                JSON_THROW_ON_ERROR
-            )
-            : []
-        ;
-
-        $requestData = $request->request->all();
+        $content = json_decode((string) $request->getContent(), true, 512);
+        if (null === $content) {
+            $content = [];
+        }
 
         /** @var array<string, string> $payload */
-        $payload = array_merge($query, $content, $requestData);
+        $payload = array_merge(
+            $request->query->all(),
+            $content,
+            $request->request->all()
+        );
 
         return $payload;
     }
