@@ -39,61 +39,61 @@ class FiltersApplicator
         switch ($filter->mode) {
             case FilterMode::NotIn:
                 if (isset($value) && is_array($value)) {
-                    $appSqlBuilder->notIn($aliasPath, $value);
+                    $appSqlBuilder->notIn($aliasPath, $value, $filter->strategy);
                 }
                 break;
             case FilterMode::In:
                 if (isset($value) && is_array($value)) {
-                    $appSqlBuilder->in($aliasPath, $value);
+                    $appSqlBuilder->in($aliasPath, $value, $filter->strategy);
                 }
                 break;
             case FilterMode::Range:
                 if (isset($value) && is_string($value)) {
-                    self::rangeDecorator($appSqlBuilder, $value, $aliasPath);
+                    self::rangeDecorator($appSqlBuilder, $value, $aliasPath, $filter->strategy);
                 }
                 break;
             case FilterMode::IsNull:
-                $appSqlBuilder->isNull($aliasPath);
+                $appSqlBuilder->isNull($aliasPath, $filter->strategy);
                 break;
             case FilterMode::NotNull:
-                $appSqlBuilder->notNull($aliasPath);
+                $appSqlBuilder->notNull($aliasPath, $filter->strategy);
                 break;
             case FilterMode::LessThan:
             case FilterMode::LessThanAlias1:
             case FilterMode::LessThanAlias2:
-                $appSqlBuilder->lessThan($aliasPath, $value);
+                $appSqlBuilder->lessThan($aliasPath, $value, $filter->strategy);
                 break;
             case FilterMode::GreaterThan:
             case FilterMode::GreaterThanAlias1:
             case FilterMode::GreaterThanAlias2:
-                $appSqlBuilder->greaterThan($aliasPath, $value);
+                $appSqlBuilder->greaterThan($aliasPath, $value, $filter->strategy);
                 break;
             case FilterMode::LessOrEquals:
             case FilterMode::LessOrEqualsAlias1:
             case FilterMode::LessOrEqualsAlias2:
-                $appSqlBuilder->lessOrEquals($aliasPath, $value);
+                $appSqlBuilder->lessOrEquals($aliasPath, $value, $filter->strategy);
                 break;
             case FilterMode::GreaterOrEquals:
             case FilterMode::GreaterOrEqualsAlias1:
             case FilterMode::GreaterOrEqualsAlias2:
-                $appSqlBuilder->greaterOrEquals($aliasPath, $value);
+                $appSqlBuilder->greaterOrEquals($aliasPath, $value, $filter->strategy);
                 break;
             case FilterMode::Like:
-                $appSqlBuilder->like($aliasPath, $value);
+                $appSqlBuilder->like($aliasPath, $value, $filter->strategy);
                 break;
             case FilterMode::NotLike:
-                $appSqlBuilder->notLike($aliasPath, $value);
+                $appSqlBuilder->notLike($aliasPath, $value, $filter->strategy);
                 break;
             case FilterMode::Equals:
             case FilterMode::EqualsAlias1:
             case FilterMode::EqualsAlias2:
-                $appSqlBuilder->equals($aliasPath, $value);
+                $appSqlBuilder->equals($aliasPath, $value, $filter->strategy);
                 break;
             case FilterMode::NotEquals:
             case FilterMode::NotEqualsAlias1:
             case FilterMode::NotEqualsAlias2:
             case FilterMode::NotEqualsAlias3:
-                $appSqlBuilder->notEquals($aliasPath, $value);
+                $appSqlBuilder->notEquals($aliasPath, $value, $filter->strategy);
                 break;
         }
     }
@@ -101,14 +101,15 @@ class FiltersApplicator
     protected static function rangeDecorator(
         FilterSqlBuilder $appSqlBuilder,
         string $value,
-        string $field
+        string $field,
+        FilterStrategy $filterStrategy,
     ): FilterSqlBuilder {
         [$gte, $lte] = explode(',', $value);
         if (self::isDateTime($gte) && self::isDateTime($lte)) {
-            return $appSqlBuilder->rangeDateTime($field, new DateTime($gte), new DateTime($lte));
+            return $appSqlBuilder->rangeDateTime($field, new DateTime($gte), new DateTime($lte), $filterStrategy);
         }
 
-        return $appSqlBuilder->range($field, $gte, $lte);
+        return $appSqlBuilder->range($field, $gte, $lte, $filterStrategy);
     }
 
     private static function isDateTime(mixed $date): bool

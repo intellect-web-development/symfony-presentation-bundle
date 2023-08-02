@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace IWD\Symfony\PresentationBundle\Dto\Input;
 
+use IWD\Symfony\PresentationBundle\Service\Filter\FilterStrategy;
 use OpenApi\Annotations as OA;
 
 class SearchQuery
@@ -27,13 +28,20 @@ class SearchQuery
      */
     public Pagination $pagination;
 
+    /**
+     * @OA\Property(property="strategy", type="string", example="and/or")
+     */
+    public FilterStrategy $baseFilterStrategy;
+
     public function __construct(
         Pagination $pagination,
         Filters $filters,
-        Sorts $sorts
+        Sorts $sorts,
+        FilterStrategy $baseFilterStrategy = FilterStrategy::And,
     ) {
         $this->pagination = $pagination;
         $this->filters = $filters;
         $this->sorts = $sorts;
+        $this->baseFilterStrategy = $baseFilterStrategy;
     }
 }

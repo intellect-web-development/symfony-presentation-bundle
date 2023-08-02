@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace IWD\Symfony\PresentationBundle\Service\Filter;
 
-use Doctrine\DBAL\Connection;
+use DateTimeInterface;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\ORM\QueryBuilder;
 use IWD\Symfony\PresentationBundle\Dto\Input\Pagination;
 use IWD\Symfony\PresentationBundle\Dto\Input\Sort;
@@ -12,33 +13,6 @@ use IWD\Symfony\PresentationBundle\Dto\Input\Sorts;
 
 class FilterSqlBuilder
 {
-    public const IN = 'in';
-    public const LIKE = 'like';
-    public const RANGE = 'range';
-    public const NOT_IN = 'not-in';
-    public const EQUALS = 'equals';
-    public const EQUALS_ALIAS_1 = 'eq';
-    public const EQUALS_ALIAS_2 = '=';
-    public const IS_NULL = 'is-null';
-    public const NOT_LIKE = 'not-like';
-    public const NOT_NULL = 'not-null';
-    public const LESS_THAN = 'less-than';
-    public const LESS_THAN_ALIAS_1 = '<';
-    public const LESS_THAN_ALIAS_2 = 'lt';
-    public const NOT_EQUALS = 'not-equals';
-    public const NOT_EQUALS_ALIAS_1 = '!=';
-    public const NOT_EQUALS_ALIAS_2 = '<>';
-    public const NOT_EQUALS_ALIAS_3 = 'neq';
-    public const GREATER_THAN = 'greater-than';
-    public const GREATER_THAN_ALIAS_1 = '>';
-    public const GREATER_THAN_ALIAS_2 = 'gt';
-    public const LESS_OR_EQUALS = 'less-or-equals';
-    public const LESS_OR_EQUALS_ALIAS_1 = '<=';
-    public const LESS_OR_EQUALS_ALIAS_2 = 'lte';
-    public const GREATER_OR_EQUALS = 'greater-or-equals';
-    public const GREATER_OR_EQUALS_ALIAS_1 = '>=';
-    public const GREATER_OR_EQUALS_ALIAS_2 = 'gte';
-
     public QueryBuilder $queryBuilder;
     private string $alias;
 
@@ -81,134 +55,211 @@ class FilterSqlBuilder
         return $this;
     }
 
-    public function equals(string $field, mixed $value): self
+    public function equals(string $field, mixed $value, FilterStrategy $filterStrategy = FilterStrategy::And): self
     {
         if (null !== $value) {
             $value = is_bool($value) ? (int) $value : $value;
             $bind = $this->bind($value);
-            $this->queryBuilder->andWhere("{$field} = :{$bind}");
+            if ($filterStrategy === FilterStrategy::And) {
+                $this->queryBuilder->andWhere("{$field} = :{$bind}");
+            }
+            if ($filterStrategy === FilterStrategy::Or) {
+                $this->queryBuilder->orWhere("{$field} = :{$bind}");
+            }
         }
 
         return $this;
     }
 
-    public function notEquals(string $field, mixed $value): self
+    public function notEquals(string $field, mixed $value, FilterStrategy $filterStrategy = FilterStrategy::And): self
     {
         if (null !== $value) {
             $value = is_bool($value) ? (int) $value : $value;
             $bind = $this->bind($value);
-            $this->queryBuilder->andWhere("{$field} != :{$bind}");
+            if ($filterStrategy === FilterStrategy::And) {
+                $this->queryBuilder->andWhere("{$field} != :{$bind}");
+            }
+            if ($filterStrategy === FilterStrategy::Or) {
+                $this->queryBuilder->orWhere("{$field} != :{$bind}");
+            }
         }
 
         return $this;
     }
 
-    public function like(string $field, mixed $value): self
+    public function like(string $field, mixed $value, FilterStrategy $filterStrategy = FilterStrategy::And): self
     {
         if (!empty($value)) {
             $bind = $this->bind("%{$value}%");
-            $this->queryBuilder->andWhere("{$field} LIKE :{$bind}");
+            if ($filterStrategy === FilterStrategy::And) {
+                $this->queryBuilder->andWhere("{$field} LIKE :{$bind}");
+            }
+            if ($filterStrategy === FilterStrategy::Or) {
+                $this->queryBuilder->orWhere("{$field} LIKE :{$bind}");
+            }
         }
 
         return $this;
     }
 
-    public function isNull(string $field): self
+    public function isNull(string $field, FilterStrategy $filterStrategy = FilterStrategy::And): self
     {
-        $this->queryBuilder->andWhere("{$field} IS NULL");
+        if ($filterStrategy === FilterStrategy::And) {
+            $this->queryBuilder->andWhere("{$field} IS NULL");
+        }
+        if ($filterStrategy === FilterStrategy::Or) {
+            $this->queryBuilder->orWhere("{$field} IS NULL");
+        }
 
         return $this;
     }
 
-    public function notNull(string $field): self
+    public function notNull(string $field, FilterStrategy $filterStrategy = FilterStrategy::And): self
     {
-        $this->queryBuilder->andWhere("{$field} IS NOT NULL");
+        if ($filterStrategy === FilterStrategy::And) {
+            $this->queryBuilder->andWhere("{$field} IS NOT NULL");
+        }
+        if ($filterStrategy === FilterStrategy::Or) {
+            $this->queryBuilder->orWhere("{$field} IS NOT NULL");
+        }
 
         return $this;
     }
 
-    public function notLike(string $field, mixed $value): self
+    public function notLike(string $field, mixed $value, FilterStrategy $filterStrategy = FilterStrategy::And): self
     {
         if (!empty($value)) {
             $bind = $this->bind("%{$value}%");
-            $this->queryBuilder->andWhere("{$field} NOT LIKE :{$bind}");
+            if ($filterStrategy === FilterStrategy::And) {
+                $this->queryBuilder->andWhere("{$field} NOT LIKE :{$bind}");
+            }
+            if ($filterStrategy === FilterStrategy::Or) {
+                $this->queryBuilder->orWhere("{$field} NOT LIKE :{$bind}");
+            }
+
         }
 
         return $this;
     }
 
-    public function in(string $field, ?array $values): self
+    public function in(string $field, ?array $values, FilterStrategy $filterStrategy = FilterStrategy::And): self
     {
         if (!empty($values)) {
             $bind = $this->bind($values);
-            $this->queryBuilder->andWhere(sprintf('%s IN (:%s)', $field, $bind));
+            if ($filterStrategy === FilterStrategy::And) {
+                $this->queryBuilder->andWhere(sprintf('%s IN (:%s)', $field, $bind));
+            }
+            if ($filterStrategy === FilterStrategy::Or) {
+                $this->queryBuilder->orWhere(sprintf('%s IN (:%s)', $field, $bind));
+            }
         }
 
         return $this;
     }
 
-    public function notIn(string $field, ?array $values): self
+    public function notIn(string $field, ?array $values, FilterStrategy $filterStrategy = FilterStrategy::And): self
     {
         if (!empty($values)) {
             $bind = $this->bind($values);
-            $this->queryBuilder->andWhere("{$field} NOT IN (:{$bind})");
+            if ($filterStrategy === FilterStrategy::And) {
+                $this->queryBuilder->andWhere("{$field} NOT IN (:{$bind})");
+            }
+            if ($filterStrategy === FilterStrategy::Or) {
+                $this->queryBuilder->orWhere("{$field} NOT IN (:{$bind})");
+            }
         }
 
         return $this;
     }
 
-    public function lessThan(string $field, mixed $lte): self
+    public function lessThan(string $field, mixed $lte, FilterStrategy $filterStrategy = FilterStrategy::And): self
     {
         if (null !== $lte) {
             $lteBind = $this->bind($lte);
-            $this->queryBuilder->andWhere("{$field} < :{$lteBind}");
+            if ($filterStrategy === FilterStrategy::And) {
+                $this->queryBuilder->andWhere("{$field} < :{$lteBind}");
+            }
+            if ($filterStrategy === FilterStrategy::Or) {
+                $this->queryBuilder->orWhere("{$field} < :{$lteBind}");
+            }
         }
 
         return $this;
     }
 
-    public function greaterThan(string $field, mixed $gte): self
+    public function greaterThan(string $field, mixed $gte, FilterStrategy $filterStrategy = FilterStrategy::And): self
     {
         if (null !== $gte) {
             $gteBind = $this->bind($gte);
-            $this->queryBuilder->andWhere("{$field} > :{$gteBind}");
+            if ($filterStrategy === FilterStrategy::And) {
+                $this->queryBuilder->andWhere("{$field} > :{$gteBind}");
+            }
+            if ($filterStrategy === FilterStrategy::Or) {
+                $this->queryBuilder->orWhere("{$field} > :{$gteBind}");
+            }
         }
 
         return $this;
     }
 
-    public function lessOrEquals(string $field, mixed $lte): self
+    public function lessOrEquals(string $field, mixed $lte, FilterStrategy $filterStrategy = FilterStrategy::And): self
     {
         if (null !== $lte) {
             $lteBind = $this->bind($lte);
-            $this->queryBuilder->andWhere("{$field} <= :{$lteBind}");
+            if ($filterStrategy === FilterStrategy::And) {
+                $this->queryBuilder->andWhere("{$field} <= :{$lteBind}");
+            }
+            if ($filterStrategy === FilterStrategy::Or) {
+                $this->queryBuilder->orWhere("{$field} <= :{$lteBind}");
+            }
         }
 
         return $this;
     }
 
-    public function greaterOrEquals(string $field, mixed $gte): self
+    public function greaterOrEquals(string $field, mixed $gte, FilterStrategy $filterStrategy = FilterStrategy::And): self
     {
         if (null !== $gte) {
             $gteBind = $this->bind($gte);
-            $this->queryBuilder->andWhere("{$field} >= :{$gteBind}");
+            if ($filterStrategy === FilterStrategy::And) {
+                $this->queryBuilder->andWhere("{$field} >= :{$gteBind}");
+            }
+            if ($filterStrategy === FilterStrategy::Or) {
+                $this->queryBuilder->orWhere("{$field} >= :{$gteBind}");
+            }
         }
 
         return $this;
     }
 
-    public function range(string $field, mixed $gte, mixed $lte): self
+    public function range(string $field, mixed $gte, mixed $lte, FilterStrategy $filterStrategy = FilterStrategy::And): self
     {
         if (null !== $gte && null !== $lte) {
             $gteBind = $this->bind($gte);
             $lteBind = $this->bind($lte);
-            $this->queryBuilder->andWhere("{$field} BETWEEN :{$gteBind} AND :{$lteBind}");
+            if ($filterStrategy === FilterStrategy::And) {
+                $this->queryBuilder->andWhere("{$field} BETWEEN :{$gteBind} AND :{$lteBind}");
+            }
+            if ($filterStrategy === FilterStrategy::Or) {
+                $this->queryBuilder->orWhere("{$field} BETWEEN :{$gteBind} AND :{$lteBind}");
+            }
         } elseif (null !== $gte) {
             $gteBind = $this->bind($gte);
-            $this->queryBuilder->andWhere("{$field} >= :{$gteBind}");
+            if ($filterStrategy === FilterStrategy::And) {
+                $this->queryBuilder->andWhere("{$field} >= :{$gteBind}");
+            }
+            if ($filterStrategy === FilterStrategy::Or) {
+                $this->queryBuilder->orWhere("{$field} >= :{$gteBind}");
+            }
+
         } elseif (null !== $lte) {
             $lteBind = $this->bind($lte);
-            $this->queryBuilder->andWhere("{$field} <= :{$lteBind}");
+            if ($filterStrategy === FilterStrategy::And) {
+                $this->queryBuilder->andWhere("{$field} <= :{$lteBind}");
+            }
+            if ($filterStrategy === FilterStrategy::Or) {
+                $this->queryBuilder->orWhere("{$field} <= :{$lteBind}");
+            }
         }
 
         return $this;
@@ -216,13 +267,15 @@ class FilterSqlBuilder
 
     public function rangeDateTime(
         string $field,
-        ?\DateTimeInterface $gte,
-        ?\DateTimeInterface $lte
+        ?DateTimeInterface $gte,
+        ?DateTimeInterface $lte,
+        FilterStrategy $filterStrategy = FilterStrategy::And
     ): self {
         $this->range(
             $field,
             $gte?->format('Y-m-d H:i:s'),
-            $lte?->format('Y-m-d H:i:s')
+            $lte?->format('Y-m-d H:i:s'),
+            $filterStrategy,
         );
 
         return $this;
@@ -233,7 +286,7 @@ class FilterSqlBuilder
         $bind = 'bind_' . md5(serialize($value) . random_bytes(10));
 
         if (is_array($value)) {
-            $this->queryBuilder->setParameter($bind, $value, Connection::PARAM_STR_ARRAY);
+            $this->queryBuilder->setParameter($bind, $value, ArrayParameterType::STRING);
         } else {
             $this->queryBuilder->setParameter($bind, $value);
         }

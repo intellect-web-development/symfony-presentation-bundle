@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace IWD\Symfony\PresentationBundle\ArgumentResolver;
 
 use Generator;
+use IWD\Symfony\PresentationBundle\Dto\Input\Filter;
+use IWD\Symfony\PresentationBundle\Service\RequestParser\Interfaces\BaseFilterStrategyMakerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -16,9 +18,10 @@ use IWD\Symfony\PresentationBundle\Service\RequestParser\Interfaces\SortsMakerIn
 class SearchQueryResolver implements ValueResolverInterface
 {
     public function __construct(
-        private FiltersMakerInterface $filtersMaker,
-        private PaginationMakerInterface $paginationMaker,
-        private SortsMakerInterface $sortsMaker,
+        private readonly FiltersMakerInterface $filtersMaker,
+        private readonly PaginationMakerInterface $paginationMaker,
+        private readonly SortsMakerInterface $sortsMaker,
+        private readonly BaseFilterStrategyMakerInterface $baseFilterStrategyMaker,
     ) {
     }
 
@@ -28,11 +31,18 @@ class SearchQueryResolver implements ValueResolverInterface
             return [];
         }
 
-        yield new SearchQuery(
-            $this->paginationMaker::make($request),
-            $this->filtersMaker::make($request),
-            $this->sortsMaker::make($request)
+        $searchQuery = new SearchQuery(
+            pagination: $this->paginationMaker::make($request),
+            filters: $this->filtersMaker::make($request),
+            sorts: $this->sortsMaker::make($request),
+            baseFilterStrategy: $this->baseFilterStrategyMaker::make($request),
         );
+
+        foreach ($searchQuery->filters->toArray() as $filter) {
+            $filter->strategy = $searchQuery->baseFilterStrategy;
+        }
+
+        yield $searchQuery;
     }
 
     private function supports(Request $request, ArgumentMetadata $argument): bool

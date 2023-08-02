@@ -40,9 +40,9 @@ class FiltersMaker implements FiltersMakerInterface
             }
             $filterMode = FilterMode::tryFrom(mb_strtolower((string) key($filterExpression))) ?? FilterMode::Equals;
             $filters[] = new Filter(
-                (string) $property,
-                $filterMode,
-                $value,
+                property: (string) $property,
+                mode: $filterMode,
+                value: $value,
             );
         }
 

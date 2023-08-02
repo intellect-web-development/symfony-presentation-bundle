@@ -14,6 +14,9 @@ services:
     IWD\Symfony\PresentationBundle\Core\Dto\Locale:
         arguments: [ '%locale%' ]
 
+    IWD\Symfony\PresentationBundle\Service\RequestParser\Interfaces\BaseFilterStrategyMakerInterface:
+        class: IWD\Symfony\PresentationBundle\Service\RequestParser\Implementations\BaseFilterStrategyMaker
+
     IWD\Symfony\PresentationBundle\Service\RequestParser\Interfaces\FiltersMakerInterface:
         class: IWD\Symfony\PresentationBundle\Service\RequestParser\Implementations\FiltersMaker
 
