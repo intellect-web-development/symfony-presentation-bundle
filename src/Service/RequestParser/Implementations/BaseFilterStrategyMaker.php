@@ -18,6 +18,6 @@ class BaseFilterStrategyMaker implements BaseFilterStrategyMakerInterface
     {
         $strategy = $request->query->get('strategy', FilterStrategy::And->value);
 
-        return FilterStrategy::tryFrom((string) mb_strtolower((string) $strategy)) ?? FilterStrategy::And;
+        return FilterStrategy::tryFrom(mb_strtolower((string) $strategy)) ?? FilterStrategy::And;
     }
 }
