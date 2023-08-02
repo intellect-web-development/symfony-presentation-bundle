@@ -68,6 +68,7 @@ abstract class CliCommand extends Command
         if ($this->autoconfigure()) {
             $inputContractClass = $this->getInputContractClass();
             if (null === $inputContractClass) {
+                #todo: теоретически этого никогда не бывает (тут и ниже), потестить. И прочие ошибки линтеров тут есть. Исправить. Потом задеплоить новую версию, подключить ее на трейдере.
                 return;
             }
             $inputContract = new $inputContractClass();
