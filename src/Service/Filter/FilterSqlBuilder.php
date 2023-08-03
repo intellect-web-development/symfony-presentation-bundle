@@ -60,10 +60,10 @@ class FilterSqlBuilder
         if (null !== $value) {
             $value = is_bool($value) ? (int) $value : $value;
             $bind = $this->bind($value);
-            if ($filterStrategy === FilterStrategy::And) {
+            if (FilterStrategy::And === $filterStrategy) {
                 $this->queryBuilder->andWhere("{$field} = :{$bind}");
             }
-            if ($filterStrategy === FilterStrategy::Or) {
+            if (FilterStrategy::Or === $filterStrategy) {
                 $this->queryBuilder->orWhere("{$field} = :{$bind}");
             }
         }
@@ -76,10 +76,10 @@ class FilterSqlBuilder
         if (null !== $value) {
             $value = is_bool($value) ? (int) $value : $value;
             $bind = $this->bind($value);
-            if ($filterStrategy === FilterStrategy::And) {
+            if (FilterStrategy::And === $filterStrategy) {
                 $this->queryBuilder->andWhere("{$field} != :{$bind}");
             }
-            if ($filterStrategy === FilterStrategy::Or) {
+            if (FilterStrategy::Or === $filterStrategy) {
                 $this->queryBuilder->orWhere("{$field} != :{$bind}");
             }
         }
@@ -91,10 +91,10 @@ class FilterSqlBuilder
     {
         if (!empty($value)) {
             $bind = $this->bind("%{$value}%");
-            if ($filterStrategy === FilterStrategy::And) {
+            if (FilterStrategy::And === $filterStrategy) {
                 $this->queryBuilder->andWhere("{$field} LIKE :{$bind}");
             }
-            if ($filterStrategy === FilterStrategy::Or) {
+            if (FilterStrategy::Or === $filterStrategy) {
                 $this->queryBuilder->orWhere("{$field} LIKE :{$bind}");
             }
         }
@@ -104,10 +104,10 @@ class FilterSqlBuilder
 
     public function isNull(string $field, FilterStrategy $filterStrategy = FilterStrategy::And): self
     {
-        if ($filterStrategy === FilterStrategy::And) {
+        if (FilterStrategy::And === $filterStrategy) {
             $this->queryBuilder->andWhere("{$field} IS NULL");
         }
-        if ($filterStrategy === FilterStrategy::Or) {
+        if (FilterStrategy::Or === $filterStrategy) {
             $this->queryBuilder->orWhere("{$field} IS NULL");
         }
 
@@ -116,10 +116,10 @@ class FilterSqlBuilder
 
     public function notNull(string $field, FilterStrategy $filterStrategy = FilterStrategy::And): self
     {
-        if ($filterStrategy === FilterStrategy::And) {
+        if (FilterStrategy::And === $filterStrategy) {
             $this->queryBuilder->andWhere("{$field} IS NOT NULL");
         }
-        if ($filterStrategy === FilterStrategy::Or) {
+        if (FilterStrategy::Or === $filterStrategy) {
             $this->queryBuilder->orWhere("{$field} IS NOT NULL");
         }
 
@@ -130,13 +130,12 @@ class FilterSqlBuilder
     {
         if (!empty($value)) {
             $bind = $this->bind("%{$value}%");
-            if ($filterStrategy === FilterStrategy::And) {
+            if (FilterStrategy::And === $filterStrategy) {
                 $this->queryBuilder->andWhere("{$field} NOT LIKE :{$bind}");
             }
-            if ($filterStrategy === FilterStrategy::Or) {
+            if (FilterStrategy::Or === $filterStrategy) {
                 $this->queryBuilder->orWhere("{$field} NOT LIKE :{$bind}");
             }
-
         }
 
         return $this;
@@ -146,10 +145,10 @@ class FilterSqlBuilder
     {
         if (!empty($values)) {
             $bind = $this->bind($values);
-            if ($filterStrategy === FilterStrategy::And) {
+            if (FilterStrategy::And === $filterStrategy) {
                 $this->queryBuilder->andWhere(sprintf('%s IN (:%s)', $field, $bind));
             }
-            if ($filterStrategy === FilterStrategy::Or) {
+            if (FilterStrategy::Or === $filterStrategy) {
                 $this->queryBuilder->orWhere(sprintf('%s IN (:%s)', $field, $bind));
             }
         }
@@ -161,10 +160,10 @@ class FilterSqlBuilder
     {
         if (!empty($values)) {
             $bind = $this->bind($values);
-            if ($filterStrategy === FilterStrategy::And) {
+            if (FilterStrategy::And === $filterStrategy) {
                 $this->queryBuilder->andWhere("{$field} NOT IN (:{$bind})");
             }
-            if ($filterStrategy === FilterStrategy::Or) {
+            if (FilterStrategy::Or === $filterStrategy) {
                 $this->queryBuilder->orWhere("{$field} NOT IN (:{$bind})");
             }
         }
@@ -176,10 +175,10 @@ class FilterSqlBuilder
     {
         if (null !== $lte) {
             $lteBind = $this->bind($lte);
-            if ($filterStrategy === FilterStrategy::And) {
+            if (FilterStrategy::And === $filterStrategy) {
                 $this->queryBuilder->andWhere("{$field} < :{$lteBind}");
             }
-            if ($filterStrategy === FilterStrategy::Or) {
+            if (FilterStrategy::Or === $filterStrategy) {
                 $this->queryBuilder->orWhere("{$field} < :{$lteBind}");
             }
         }
@@ -191,10 +190,10 @@ class FilterSqlBuilder
     {
         if (null !== $gte) {
             $gteBind = $this->bind($gte);
-            if ($filterStrategy === FilterStrategy::And) {
+            if (FilterStrategy::And === $filterStrategy) {
                 $this->queryBuilder->andWhere("{$field} > :{$gteBind}");
             }
-            if ($filterStrategy === FilterStrategy::Or) {
+            if (FilterStrategy::Or === $filterStrategy) {
                 $this->queryBuilder->orWhere("{$field} > :{$gteBind}");
             }
         }
@@ -206,10 +205,10 @@ class FilterSqlBuilder
     {
         if (null !== $lte) {
             $lteBind = $this->bind($lte);
-            if ($filterStrategy === FilterStrategy::And) {
+            if (FilterStrategy::And === $filterStrategy) {
                 $this->queryBuilder->andWhere("{$field} <= :{$lteBind}");
             }
-            if ($filterStrategy === FilterStrategy::Or) {
+            if (FilterStrategy::Or === $filterStrategy) {
                 $this->queryBuilder->orWhere("{$field} <= :{$lteBind}");
             }
         }
@@ -221,10 +220,10 @@ class FilterSqlBuilder
     {
         if (null !== $gte) {
             $gteBind = $this->bind($gte);
-            if ($filterStrategy === FilterStrategy::And) {
+            if (FilterStrategy::And === $filterStrategy) {
                 $this->queryBuilder->andWhere("{$field} >= :{$gteBind}");
             }
-            if ($filterStrategy === FilterStrategy::Or) {
+            if (FilterStrategy::Or === $filterStrategy) {
                 $this->queryBuilder->orWhere("{$field} >= :{$gteBind}");
             }
         }
@@ -237,27 +236,26 @@ class FilterSqlBuilder
         if (null !== $gte && null !== $lte) {
             $gteBind = $this->bind($gte);
             $lteBind = $this->bind($lte);
-            if ($filterStrategy === FilterStrategy::And) {
+            if (FilterStrategy::And === $filterStrategy) {
                 $this->queryBuilder->andWhere("{$field} BETWEEN :{$gteBind} AND :{$lteBind}");
             }
-            if ($filterStrategy === FilterStrategy::Or) {
+            if (FilterStrategy::Or === $filterStrategy) {
                 $this->queryBuilder->orWhere("{$field} BETWEEN :{$gteBind} AND :{$lteBind}");
             }
         } elseif (null !== $gte) {
             $gteBind = $this->bind($gte);
-            if ($filterStrategy === FilterStrategy::And) {
+            if (FilterStrategy::And === $filterStrategy) {
                 $this->queryBuilder->andWhere("{$field} >= :{$gteBind}");
             }
-            if ($filterStrategy === FilterStrategy::Or) {
+            if (FilterStrategy::Or === $filterStrategy) {
                 $this->queryBuilder->orWhere("{$field} >= :{$gteBind}");
             }
-
         } elseif (null !== $lte) {
             $lteBind = $this->bind($lte);
-            if ($filterStrategy === FilterStrategy::And) {
+            if (FilterStrategy::And === $filterStrategy) {
                 $this->queryBuilder->andWhere("{$field} <= :{$lteBind}");
             }
-            if ($filterStrategy === FilterStrategy::Or) {
+            if (FilterStrategy::Or === $filterStrategy) {
                 $this->queryBuilder->orWhere("{$field} <= :{$lteBind}");
             }
         }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace IWD\Symfony\PresentationBundle\ArgumentResolver;
 
 use Generator;
-use IWD\Symfony\PresentationBundle\Dto\Input\Filter;
 use IWD\Symfony\PresentationBundle\Service\RequestParser\Interfaces\BaseFilterStrategyMakerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;

@@ -28,7 +28,7 @@ class ValidatorService implements ValidatorServiceInterface
         }
         if ($violationList->count()) {
             $errorJson = $this->serializer->serialize($errors, 'json', [
-                'json_encode_options' => JSON_UNESCAPED_UNICODE
+                'json_encode_options' => JSON_UNESCAPED_UNICODE,
             ]);
             throw new ValidatorException($errorJson);
         }
