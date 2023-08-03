@@ -16,11 +16,9 @@ class CliContractResolver
     }
 
     /**
-     * @template T of object
-     *
      * @param InputInterface $input
-     * @param class-string<T> $contractClass
-     * @return T
+     * @param class-string<InputContractInterface> $contractClass
+     * @return InputContractInterface
      */
     public function resolve(InputInterface $input, string $contractClass): InputContractInterface
     {

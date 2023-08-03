@@ -35,7 +35,7 @@ abstract class CliCommand extends Command
         $reflection = new ReflectionClass($this);
         $attributes = $reflection->getAttributes();
         foreach ($attributes as $attribute) {
-            if ($attribute->getName() === CliContract::class) {
+            if (CliContract::class === $attribute->getName()) {
                 $class = $attribute->getArguments()['class'] ?? NullInputContract::class;
                 if (!class_exists($class)) {
                     throw new Exception(
@@ -67,10 +67,6 @@ abstract class CliCommand extends Command
     {
         if ($this->autoconfigure()) {
             $inputContractClass = $this->getInputContractClass();
-            if (null === $inputContractClass) {
-                #todo: теоретически этого никогда не бывает (тут и ниже), потестить. И прочие ошибки линтеров тут есть. Исправить. Потом задеплоить новую версию, подключить ее на трейдере.
-                return;
-            }
             $inputContract = new $inputContractClass();
             // Получаем объект ReflectionClass для класса InputContract
             $reflectionClass = new ReflectionClass($inputContractClass);
@@ -132,12 +128,6 @@ abstract class CliCommand extends Command
 
         try {
             $inputContractClass = $this->getInputContractClass();
-            if (null === $inputContractClass) {
-                return $this->handle(
-                    io: $io,
-                    inputContract: new NullInputContract(),
-                );
-            }
             /** @var InputContractInterface $inputContract */
             $inputContract = $this->cliContractResolver->resolve($input, $inputContractClass);
         } catch (ValidatorException $exception) {
@@ -149,7 +139,9 @@ abstract class CliCommand extends Command
                 ++$i;
                 $message .= sprintf(
                     '%s. %s: %s',
-                    $i, $property, $violation
+                    $i,
+                    $property,
+                    $violation,
                 ) . PHP_EOL;
             }
             $io->error($message);
