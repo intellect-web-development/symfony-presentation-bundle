@@ -90,12 +90,13 @@ class FilterSqlBuilder
     public function like(string $field, mixed $value, FilterStrategy $filterStrategy = FilterStrategy::And): self
     {
         if (!empty($value)) {
+            $value = mb_strtolower($value);
             $bind = $this->bind("%{$value}%");
             if (FilterStrategy::And === $filterStrategy) {
-                $this->queryBuilder->andWhere("{$field} LIKE :{$bind}");
+                $this->queryBuilder->andWhere("LOWER({$field}) LIKE :{$bind}");
             }
             if (FilterStrategy::Or === $filterStrategy) {
-                $this->queryBuilder->orWhere("{$field} LIKE :{$bind}");
+                $this->queryBuilder->orWhere("LOWER({$field}) LIKE :{$bind}");
             }
         }
 
@@ -129,12 +130,13 @@ class FilterSqlBuilder
     public function notLike(string $field, mixed $value, FilterStrategy $filterStrategy = FilterStrategy::And): self
     {
         if (!empty($value)) {
+            $value = mb_strtolower($value);
             $bind = $this->bind("%{$value}%");
             if (FilterStrategy::And === $filterStrategy) {
-                $this->queryBuilder->andWhere("{$field} NOT LIKE :{$bind}");
+                $this->queryBuilder->andWhere("LOWER({$field}) NOT LIKE :{$bind}");
             }
             if (FilterStrategy::Or === $filterStrategy) {
-                $this->queryBuilder->orWhere("{$field} NOT LIKE :{$bind}");
+                $this->queryBuilder->orWhere("LOWER({$field}) NOT LIKE :{$bind}");
             }
         }
 
